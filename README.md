@@ -1,7 +1,7 @@
 # Custom Desktop
 The Ubuntu custom desktop system.
 
-It replaces the Ubuntu original metapackages (`ubuntu-desktop-minimal` and `ubuntu-desktop`). Keep in mind that they are also used to help ensure proper upgrades, so it is recommended that they not be removed. Only do this if you know what you are doing, and proceed at your own risk.
+It replaces the Ubuntu original metapackages (`ubuntu-desktop-minimal` and `ubuntu-desktop`). **Keep in mind that they are also used to help ensure proper upgrades, so it is recommended that they not be removed. Only do this if you know what you are doing, and proceed at your own risk.**
 
 Those are the packages that are added, removed or replaced:
 | ubuntu-desktop-minimal                     | custom-desktop-minimal        |
