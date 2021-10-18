@@ -26,7 +26,7 @@ It also suggests `balena-etcher-electron` to replace `usb-creator-gtk`, but as a
 
 ## How to use
 ### Install
-Download the `.deb` files from the [releases page](releases) or [build them](#Building) yourself. Then open the terminal in the path where the `.deb` files are and install the desired metapackages.
+Download the `.deb` files from the [releases page](https://github.com/natanjunges/custom-desktop/releases) or [build them](#Building) yourself. Then open the terminal in the path where the `.deb` files are and install the desired metapackages.
 
 Install `custom-desktop-minimal` (replace the version with the appropriate value):
 ```shell
