@@ -72,6 +72,11 @@ Reinstall `ubuntu-desktop-minimal`:
 sudo apt install ubuntu-desktop-minimal
 ```
 
+If you wish to do so, reinstall `snap:snap-store` and `snap:firefox`:
+```shell
+sudo snap install snap-store firefox
+```
+
 If you only want the packages in the minimal set, reinstall `ubuntu-desktop` without the recommends:
 ```shell
 sudo apt install --no-install-recommends ubuntu-desktop
@@ -82,13 +87,13 @@ If you want all the packages instead, reinstall `ubuntu-desktop` with the recomm
 sudo apt install ubuntu-desktop
 ```
 
-Now it's time to remove the custom metapackages. Remove them in the appropriate order to avoid problems:
+Now it's time to remove the custom metapackages:
 ```shell
 sudo apt purge custom-desktop
 sudo apt purge custom-desktop-minimal
 ```
 
-Remove the packages that might have remained. If you want to keep any of those packages, just remove them from the command:
+Remove the packages that might have remained:
 ```shell
 sudo apt purge firefox flatpak gnome-session gnome-software gnome-software-plugin-flatpak qbittorrent
 sudo apt autoremove --purge
