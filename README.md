@@ -6,6 +6,8 @@ It replaces the Ubuntu original metapackages (`ubuntu-desktop-minimal` and `ubun
 Those are the packages that are added, removed or replaced:
 | ubuntu-desktop-minimal                     | custom-desktop-minimal        |
 |--------------------------------------------|-------------------------------|
+| ~~gnome-logs~~                             |                               |
+| ~~gnome-power-manager~~                    |                               |
 | ~~gnome-shell-extension-desktop-icons-ng~~ |                               |
 | ~~gnome-shell-extension-ubuntu-dock~~      |                               |
 | ~~snapd~~                                  | flatpak                       |
@@ -16,13 +18,22 @@ Those are the packages that are added, removed or replaced:
 | ~~yaru-theme-gtk~~                         |                               |
 | ~~yaru-theme-sound~~                       |                               |
 
-| ubuntu-desktop       | custom-desktop |
-|----------------------|----------------|
-| ~~transmission-gtk~~ | qbittorrent    |
-| ~~usb-creator-gtk~~  |                |
-|                      | vlc            |
+| ubuntu-desktop                | custom-desktop |
+|-------------------------------|----------------|
+| ~~aisleriot~~                 |                |
+| ~~cheese~~                    |                |
+| ~~gnome-mahjongg~~            |                |
+| ~~gnome-mines~~               |                |
+| ~~gnome-sudoku~~              |                |
+| ~~remmina~~                   |                |
+| ~~simple-scan~~               |                |
+| ~~thunderbird~~               |                |
+| ~~thunderbird-gnome-support~~ |                |
+| ~~transmission-gtk~~          | qbittorrent    |
+| ~~usb-creator-gtk~~           |                |
+|                               | vlc            |
 
-It also suggests `balena-etcher-electron` to replace `usb-creator-gtk`, but as a PPA is required, it is not installed.
+All the removed packages that do not have a replacement are still suggested, but not installed by default. It suggests `balena-etcher-electron` instead of `usb-creator-gtk` (as a replacement), but as a PPA is required, it is not installed.
 
 ## How to use
 ### Install
@@ -51,7 +62,7 @@ sudo apt purge ubuntu-desktop-minimal
 
 Remove the packages that might have remained. If you want to keep any of those packages, just remove them from the command:
 ```shell
-sudo apt purge gnome-shell-extension-desktop-icons-ng gnome-shell-extension-ubuntu-dock snapd transmission-gtk ubuntu-session usb-creator-gtk yaru-theme-gtk yaru-theme-sound
+sudo apt purge aisleriot cheese gnome-logs gnome-mahjongg gnome-mines gnome-power-manager gnome-shell-extension-desktop-icons-ng gnome-shell-extension-ubuntu-dock gnome-sudoku remmina simple-scan snapd thunderbird thunderbird-gnome-support transmission-gtk ubuntu-session usb-creator-gtk yaru-theme-gtk yaru-theme-sound
 sudo apt autoremove --purge
 ```
 
