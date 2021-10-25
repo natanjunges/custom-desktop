@@ -39,7 +39,7 @@ All the removed packages that do not have a replacement are still suggested, but
 ### Install
 Download the `.deb` files from the [releases page](https://github.com/natanjunges/custom-desktop/releases) or [build them](#Building) yourself. Then open the terminal in the path where the `.deb` files are.
 
-Install `custom-desktop-minimal` (replace the version with the appropriate value):
+Install `custom-desktop-minimal`:
 ```shell
 sudo apt install ./custom-desktop-minimal_*_all.deb
 ```
@@ -71,7 +71,9 @@ sudo apt-mark manual <packages to keep> # It can be ommited if you do not want t
 sudo apt autoremove --purge
 ```
 
-Log out and back in to load `gnome-session`. Then change the icon and cursor themes to Yaru:
+Log out and back in to load `gnome-session`.
+
+Change the icon and cursor themes to Yaru:
 ```shell
 gsettings set org.gnome.desktop.interface icon-theme "Yaru"
 gsettings set org.gnome.desktop.interface cursor-theme "Yaru"
