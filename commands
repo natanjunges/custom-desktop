@@ -1,0 +1,94 @@
+run:
+    sudo apt update
+    sudo apt upgrade
+    sudo apt autoremove --purge
+restart
+run:
+    gsettings set org.gnome.desktop.input-sources xkb-options "['numpad:microsoft']"
+
+run:
+    sudo apt install firefox gnome-software gnome-software-plugin-flatpak flatpak gnome-session
+    sudo apt install qbittorrent vlc
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed "s/firefox_firefox/firefox/; s/snap-store_ubuntu-software/org.gnome.Software/")"
+logout and login into the GNOME session
+run:
+    gsettings set org.gnome.desktop.interface icon-theme "Yaru"
+    gsettings set org.gnome.desktop.interface cursor-theme "Yaru"
+    sudo apt-mark manual $(apt-cache depends --no-recommends --installed ubuntu-desktop-minimal | grep "Depends:" | sed "s/  Depends: //" | sed ":a; $!N; s/\n/ /; ta")
+    sudo apt-mark manual $(apt-cache depends --no-depends --installed ubuntu-desktop | grep "Recommends:" | sed "s/  Recommends: //" | sed ":a; $!N; s/\n/ /; ta")
+    sudo apt purge ubuntu-desktop ubuntu-desktop-minimal snapd ubuntu-session
+    sudo apt purge transmission-gtk
+    sudo apt autoremove --purge
+
+run and put output to file:
+    for pkg in $(apt-cache depends --no-recommends --installed ubuntu-desktop-minimal | grep "Depends:" | sed "s/  Depends: //"); do
+        if [ $(apt-cache rdepends --no-conflicts --no-breaks --no-replaces --no-enhances --installed $pkg | wc -l) == 2 ]; then
+            echo $pkg
+        fi
+    done
+    for pkg in $(apt-cache depends --no-depends --installed ubuntu-desktop | grep "Recommends:" | sed "s/  Recommends: //"); do
+        if [ $(apt-cache rdepends --no-conflicts --no-breaks --no-replaces --no-enhances --installed $pkg | wc -l) == 2 ]; then
+            echo $pkg
+        fi
+    done
+choose from the output of the commands above which packages to remove
+run:
+    sudo apt purge <packages to remove>
+    sudo apt autoremove --purge
+
+run:
+    for pkg in $(apt-cache depends --no-recommends --installed ubuntu-desktop-minimal | grep "Depends:" | sed "s/  Depends: //"); do
+        if [ $(apt-cache rdepends --no-conflicts --no-breaks --no-replaces --no-enhances --installed $pkg | wc -l) != 2 ]; then
+            sudo apt-mark auto $pkg
+        fi
+    done
+    for pkg in $(apt-cache depends --no-depends --installed ubuntu-desktop | grep "Recommends:" | sed "s/  Recommends: //"); do
+        if [ $(apt-cache rdepends --no-conflicts --no-breaks --no-replaces --no-enhances --installed $pkg | wc -l) != 2 ]; then
+            sudo apt-mark auto $pkg
+        fi
+    done
+find all the candidates for removal by running and aborting:
+    sudo apt autoremove
+add to the appropriate sections in the file the ones that have ubuntu-desktop and ubuntu-desktop-minimal as result of running:
+    apt-cache rdepends <package> | grep "ubuntu-desktop"
+mark them as manual by running:
+    sudo apt-mark manual <package>
+choose from the output of the commands above which packages to remove
+run:
+    sudo apt purge <packages to remove>
+    sudo apt autoremove --purge
+
+run and put output to file:
+    for pkg in $(apt-cache depends --no-recommends --installed ubuntu-desktop-minimal | grep "Depends:" | sed "s/  Depends: //"); do
+        if [ $(apt-cache rdepends --no-pre-depends --no-depends --no-conflicts --no-breaks --no-replaces --no-enhances --installed $pkg | wc -l) != 2 ] && [ $(apt-cache rdepends --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances --installed $pkg | wc -l) == 2 ]; then
+            echo $pkg
+        fi
+    done
+    for pkg in $(apt-cache depends --no-depends --installed ubuntu-desktop | grep "Recommends:" | sed "s/  Recommends: //"); do
+        if [ $(apt-cache rdepends --no-pre-depends --no-depends --no-conflicts --no-breaks --no-replaces --no-enhances --installed $pkg | wc -l) != 2 ] && [ $(apt-cache rdepends --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances --installed $pkg | wc -l) == 2 ]; then
+            echo $pkg
+        fi
+    done
+choose from the output of the commands above which packages to remove
+run:
+    sudo apt purge <packages to remove>
+    sudo apt autoremove --purge
+
+run and put output to file:
+    for pkg in $(apt-cache depends --no-recommends --installed ubuntu-desktop-minimal | grep "Depends:" | sed "s/  Depends: //"); do
+        if [ $(apt-cache rdepends --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances --installed $pkg | wc -l) != 2 ]; then
+            echo $pkg
+        fi
+    done
+    for pkg in $(apt-cache depends --no-depends --installed ubuntu-desktop | grep "Recommends:" | sed "s/  Recommends: //"); do
+        if [ $(apt-cache rdepends --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances --installed $pkg | wc -l) != 2 ]; then
+            echo $pkg
+        fi
+    done
+add to the appropriate sections in the file the ones that don't have any package listed in the previous categories as result of running and aborting:
+    sudo apt purge <package>
+choose from the output of the commands above which packages to remove
+run:
+    sudo apt purge <packages to remove>
+    sudo apt autoremove --purge
