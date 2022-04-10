@@ -61,7 +61,7 @@ There are groups of packages that originally belonged to the `ubuntu-desktop-min
 
 `bluez-cups` is repeated in [Printing](#Printing) to make visualization easier.
 
-`rfkill` is repeated in [Wi-Fi](#WiFi) to make visualization easier.
+`rfkill` is repeated in [Wi-Fi](#Wi-Fi) to make visualization easier.
 
 ### Fingerprint
 
