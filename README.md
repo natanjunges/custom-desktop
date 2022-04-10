@@ -249,6 +249,11 @@ Replace the favorites for `snap:firefox` and `snap:snap-store` with the ones for
 gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed "s/firefox_firefox/firefox/; s/snap-store_ubuntu-software/org.gnome.Software/")"
 ```
 
+Add the Flathub repository to flatpak:
+```shell
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+```
+
 Log out and back in, but into the GNOME session (Wayland) instead of the Ubuntu one.
 
 Change the icon and cursor themes to Yaru:
