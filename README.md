@@ -1,5 +1,7 @@
 # Custom Desktop
-The Ubuntu custom desktop system.
+The custom Ubuntu desktop system.
+
+[Ler em português do Brasil](README-pt_BR.md).
 
 It replaces the Ubuntu 21.10 original desktop metapackages ([`ubuntu-desktop-minimal`](https://packages.ubuntu.com/impish/ubuntu-desktop-minimal) and [`ubuntu-desktop`](https://packages.ubuntu.com/impish/ubuntu-desktop)). **Keep in mind that they are also used to help ensure proper upgrades, so it is recommended that they not be removed**. **Only do this if you know what you are doing, and proceed at your own risk**. To avoid any problems, it is recommended to install them in a fresh Ubuntu 21.10 install.
 
@@ -45,7 +47,7 @@ gsettings set org.gnome.desktop.interface icon-theme "Yaru"
 gsettings set org.gnome.desktop.interface cursor-theme "Yaru"
 ```
 
-Remove the packages that might have remained (you might also want to remove `fonts-opensymbol`, `gnome-disk-uility` and `libwmf0.2-7-gtk` if you only want the packages in the minimal set). If you want to remove any of the suggested packages, add them to the first command:
+Remove the packages that might have remained (you might also want to remove `fonts-opensymbol`, `gnome-disk-uility` and `libwmf0.2-7-gtk` if you only want the packages in the minimal set). If you want to remove any of the [suggested packages](#Details), add them to the first command:
 ```shell
 sudo apt purge dmz-cursor-theme gnome-accessibility-themes gnome-session-canberra gnome-shell-extension-desktop-icons-ng gnome-shell-extension-ubuntu-dock gstreamer1.0-pulseaudio ibus-gtk libreoffice-ogltrans libreoffice-pdfimport libreoffice-style-breeze libu2f-udev snapd transmission-gtk ubuntu-session xcursor-themes xorg yaru-theme-gnome-shell yaru-theme-gtk yaru-theme-sound
 sudo apt autoremove --purge
@@ -91,7 +93,7 @@ sudo apt-mark manual <packages to keep> # It can be ommited if you do not want t
 sudo apt autoremove --purge
 ```
 
-## Suggested GNOME Shell and GTK Theme
+## Suggested GNOME Shell and GTK theme
 [WhiteSur](https://github.com/vinceliuice/WhiteSur-gtk-theme): MacOS Big Sur-like theme for Gnome desktops.
 
 Install it with the suggested options:
@@ -99,7 +101,7 @@ Install it with the suggested options:
 ./install.sh -o solid -a alt -i ubuntu -m --right
 ```
 
-## Suggested GNOME Shell Extenstions
+## Suggested GNOME Shell extenstions
 - [Awesome Tiles](https://extensions.gnome.org/extension/4702/awesome-tiles/): Tile windows using keyboard shortcuts;
 - [Caffeine](https://extensions.gnome.org/extension/517/caffeine/): Disable the screensaver and auto suspend;
 - [Dash to Dock](https://extensions.gnome.org/extension/307/dash-to-dock/): This extension moves the dash out of the overview transforming it in a dock for an easier launching of applications and a faster switching between windows and desktops;
@@ -108,7 +110,7 @@ Install it with the suggested options:
 - [Tiling Assistant](https://extensions.gnome.org/extension/3733/tiling-assistant/): Expand GNOME's 2 column tiling and add a Windows-snap-assist-inspired popup;
 - [User Themes](https://extensions.gnome.org/extension/19/user-themes/): Load shell themes from user directory.
 
-## Suggested Firefox Extensions
+## Suggested Firefox extensions
 - [Bitwarden - Free Password Manager](https://addons.mozilla.org/firefox/addon/bitwarden-password-manager/): A secure and free password manager for all of your devices;
 - [GNOME Shell integration](https://addons.mozilla.org/firefox/addon/gnome-shell-integration/): This extension provides integration with GNOME Shell and the corresponding extensions repository;
     - First you need to install `chrome-gnome-shell`:
@@ -168,8 +170,8 @@ There are groups of packages that originally belonged to the `ubuntu-desktop-min
 
 #### Bluetooth
 
-| Function | ubuntu-desktop-minimal      | Description |
-|----------|-----------------------------|-------------|
+| Function | ubuntu-desktop-minimal | Description |
+|----------|------------------------|-------------|
 | | [bluez](https://packages.ubuntu.com/impish/bluez) | Bluetooth tools and daemons. |
 | | [gnome-bluetooth](https://packages.ubuntu.com/impish/gnome-bluetooth) | GNOME Bluetooth tools. |
 | | [pulseaudio-module-bluetooth](https://packages.ubuntu.com/impish/pulseaudio-module-bluetooth) | Bluetooth module for PulseAudio sound server. |
@@ -192,7 +194,7 @@ There are groups of packages that originally belonged to the `ubuntu-desktop-min
 |------------------------|-------------|
 | [gamemode](https://packages.ubuntu.com/impish/gamemode) | Optimise Linux system performance on demand. |
 
-#### Gnome Extras
+#### GNOME extras
 
 | ubuntu-desktop-minimal | Description |
 |------------------------|-------------|
@@ -200,7 +202,7 @@ There are groups of packages that originally belonged to the `ubuntu-desktop-min
 | [gnome-font-viewer](https://packages.ubuntu.com/impish/gnome-font-viewer) | Font viewer for GNOME. |
 | [gnome-logs](https://packages.ubuntu.com/impish/gnome-logs) | Viewer for the systemd journal. |
 
-#### Language Fonts
+#### Language fonts
 
 | Function | ubuntu-desktop-minimal | Description |
 |----------|------------------------|-------------|
@@ -215,14 +217,14 @@ There are groups of packages that originally belonged to the `ubuntu-desktop-min
 | Thai | [fonts-thai-tlwg](https://packages.ubuntu.com/impish/fonts-thai-tlwg) | Thai fonts maintained by TLWG (metapackage). |
 | Tibetan | [fonts-tibetan-machine](https://packages.ubuntu.com/impish/fonts-tibetan-machine) | Font for Tibetan, Dzongkha and Ladakhi (OpenType Unicode). |
 
-#### Legacy Hardware
+#### Legacy hardware
 
 | ubuntu-desktop-minimal | Description |
 |------------------------|-------------|
 | [pcmciautils](https://packages.ubuntu.com/impish/pcmciautils) | PCMCIA utilities for Linux 2.6. |
 | [inputattach](https://packages.ubuntu.com/impish/inputattach) | Utility to connect serial-attached peripherals to the input subsystem. |
 
-#### LibreOffice Support
+#### LibreOffice support
 
 | ubuntu-desktop-minimal | Description |
 |------------------------|-------------|
@@ -309,14 +311,14 @@ There are groups of packages that originally belonged to the `ubuntu-desktop` me
 | [gnome-mines](https://packages.ubuntu.com/impish/gnome-mines) | Popular minesweeper puzzle game for GNOME. |
 | [gnome-sudoku](https://packages.ubuntu.com/impish/gnome-sudoku) | Sudoku puzzle game for GNOME. |
 
-#### Gnome Extras
+#### GNOME extras
 
 | ubuntu-desktop | Description |
 |----------------|-------------|
 | [cheese](https://packages.ubuntu.com/impish/cheese) | Tool to take pictures and videos from your webcam. |
 | [simple-scan](https://packages.ubuntu.com/impish/simple-scan) | Simple Scanning Utility. |
 
-#### Mail
+#### Email
 
 | ubuntu-desktop | Description |
 |----------------|-------------|
@@ -330,7 +332,7 @@ There are groups of packages that originally belonged to the `ubuntu-desktop` me
 | [branding-ubuntu](https://packages.ubuntu.com/impish/branding-ubuntu) | Replacement artwork with Ubuntu branding. |
 | [usb-creator-gtk](https://packages.ubuntu.com/impish/usb-creator-gtk) | Create a startup disk using a CD or disc image (for GNOME). |
 
-#### Remote Desktop
+#### Remote desktop
 
 | ubuntu-desktop | Description |
 |----------------|-------------|

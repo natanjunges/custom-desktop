@@ -14,5 +14,5 @@ Task: ubuntu-desktop
 Replaces: ubuntu-desktop
 Copyright: ../LICENSE
 Readme: ../README.md
-Description: The Ubuntu custom desktop system
- This package depends on all of the packages in the Ubuntu custom desktop system.
+Description: The custom Ubuntu desktop system
+ This package depends on all of the packages in the custom Ubuntu desktop system.
