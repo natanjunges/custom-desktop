@@ -1,4 +1,6 @@
 # Custom Desktop
+[Ler em português do Brasil](README-pt_BR.md).
+
 The custom Ubuntu desktop system.  
 Copyright (C) 2021, 2022  Natan Junges &lt;natanajunges@gmail.com&gt;
 
@@ -14,8 +16,6 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License  
 along with Custom Desktop.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
-
-[Ler em português do Brasil](README-pt_BR.md).
 
 It replaces the Ubuntu 21.10 original desktop metapackages ([`ubuntu-desktop-minimal`](https://packages.ubuntu.com/impish/ubuntu-desktop-minimal) and [`ubuntu-desktop`](https://packages.ubuntu.com/impish/ubuntu-desktop)). **Keep in mind that they are also used to help ensure proper upgrades, so it is recommended that they not be removed**. **Only do this if you know what you are doing, and proceed at your own risk**. To avoid any problems, it is recommended to install them in a fresh Ubuntu 21.10 install.
 
