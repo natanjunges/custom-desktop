@@ -29,25 +29,56 @@ Now it is time to remove the Ubuntu original metapackages:
 sudo apt purge ubuntu-desktop ubuntu-desktop-minimal
 ```
 
-Replace the favorites for `snap:firefox` and `snap:snap-store` with the ones for `firefox` and `gnome-software`, respectively:
-```shell
-gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed "s/firefox_firefox/firefox/; s/snap-store_ubuntu-software/org.gnome.Software/")"
-```
-
 Add the Flathub repository to flatpak:
 ```shell
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 ```
 
 Log out and back in, but into the GNOME session (Wayland) instead of the Ubuntu one.
 
-Change the icon and cursor themes to Yaru:
+Add a custom user profile to dconf/gsettings:
 ```shell
-gsettings set org.gnome.desktop.interface icon-theme "Yaru"
-gsettings set org.gnome.desktop.interface cursor-theme "Yaru"
+sudo bash -c "echo user-db:user > /etc/dconf/profile/user"
+sudo bash -c "echo system-db:local >> /etc/dconf/profile/user"
+sudo mkdir /etc/dconf/db/local.d
 ```
 
-Remove the packages that might have remained (you might also want to remove `fonts-opensymbol`, `gnome-disk-uility` and `libwmf0.2-7-gtk` if you only want the packages in the minimal set). If you want to remove any of the [suggested packages](#Details), add them to the first command:
+Change the icon and cursor themes to Yaru:
+```shell
+sudo bash -c "echo [org/gnome/desktop/interface] > /etc/dconf/db/local.d/01-custom-desktop"
+sudo bash -c "echo icon-theme=\'Yaru\' >> /etc/dconf/db/local.d/01-custom-desktop"
+sudo bash -c "echo cursor-theme=\'Yaru\' >> /etc/dconf/db/local.d/01-custom-desktop"
+sudo dconf update
+```
+
+For each user in the system, run:
+```shell
+gsettings reset org.gnome.desktop.interface icon-theme
+gsettings reset org.gnome.desktop.interface cursor-theme
+```
+
+Replace the favorites for `snap:firefox` and `snap:snap-store` with the ones for `firefox` and `gnome-software`, respectively:
+```shell
+sudo bash -c "echo [org/gnome/shell] >> /etc/dconf/db/local.d/01-custom-desktop"
+sudo bash -c "echo \"favorite-apps=\$(gsettings get org.gnome.shell favorite-apps | sed \"s/firefox_firefox/firefox/; s/snap-store_ubuntu-software/org.gnome.Software/\")\" >> /etc/dconf/db/local.d/01-custom-desktop"
+sudo dconf update
+```
+
+For each user in the system, do the following:
+- If you want to preserve the customizations made to the favorites, run:
+```shell
+gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed "s/firefox_firefox/firefox/; s/snap-store_ubuntu-software/org.gnome.Software/")"
+```
+- If instead you want to reset them to the default values (eg. in a fresh install), run:
+```shell
+gsettings reset org.gnome.shell favorite-apps
+```
+
+Log out and back into the GNOME session (Wayland) to apply changes.
+
+If you are not doing this in a fresh install, you might want to replace the installed snaps with their equivalent flatpaks: [popey/unsnap](https://github.com/popey/unsnap). **Keep in mind that this tool is still in "pre-alpha" stage, and might not work as intended**. **You can [contribute](https://github.com/popey/unsnap#contributions) testing it and reporting bugs or missing flatpaks**. Only the generated scripts `00-backup` and `03-install-flatpaks` are required to be run, as the rest is already done here. `snap:firefox` is already replaced with the native deb package, so you should remove it from the generated `03-install-flatpaks` script.
+
+Remove the packages that remained (you might also want to remove `fonts-opensymbol`, `gnome-disk-utility` and `libwmf0.2-7-gtk` if you only want the packages in the minimal set). If you want to remove any of the [suggested packages](#Details), add them to the first command:
 ```shell
 sudo apt purge dmz-cursor-theme gnome-accessibility-themes gnome-session-canberra gnome-shell-extension-desktop-icons-ng gnome-shell-extension-ubuntu-dock gstreamer1.0-pulseaudio ibus-gtk libreoffice-ogltrans libreoffice-pdfimport libreoffice-style-breeze libu2f-udev snapd transmission-gtk ubuntu-session xcursor-themes xorg yaru-theme-gnome-shell yaru-theme-gtk yaru-theme-sound
 sudo apt autoremove --purge
@@ -74,19 +105,45 @@ Now it is time to remove the custom metapackages:
 sudo apt purge custom-desktop custom-desktop-minimal
 ```
 
-If you wish to do so, reinstall `snap:snap-store` and `snap:firefox`:
+Remove the custom profile from dconf/gsettings:
 ```shell
-sudo snap install snap-store firefox
-```
-
-Replace the favorites for `firefox` and `gnome-software` with the ones for `snap:firefox` and `snap:snap-store`, respectively:
-```shell
-gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed "s/firefox/firefox_firefox/; s/org.gnome.Software/snap-store_ubuntu-software/")"
+sudo rm /etc/dconf/db/local.d/01-custom-desktop
+sudo rm -r /etc/dconf/db/local.d
+sudo rm /etc/dconf/profile/user
+sudo dconf update
 ```
 
 Log out and back in, but into the Ubuntu session (the default one is Wayland, but you can also use the X one) instead of the GNOME one.
 
-Remove the packages that might have remained. If you want to keep any of those packages, remove them from the first command and add them to the second:
+For each user in the system, run:
+```shell
+gsettings reset org.gnome.desktop.interface icon-theme
+gsettings reset org.gnome.desktop.interface cursor-theme
+```
+
+Reinstall `snap:snap-store` and `snap:firefox`:
+```shell
+sudo snap install snap-store firefox
+```
+
+For each user in the system, do the following:
+- If you want to preserve the customizations made to the favorites, run:
+```shell
+gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed "s/firefox/firefox_firefox/; s/org.gnome.Software/snap-store_ubuntu-software/")"
+```
+- If instead you want to reset them to the default values, run:
+```shell
+gsettings reset org.gnome.shell favorite-apps
+```
+
+Log out and back into the Ubuntu session to apply changes.
+
+Remove the flatpaks that might have been installed:
+```shell
+sudo flatpak remove --all
+```
+
+Remove the packages that remained. If you want to keep any of those packages, remove them from the first command and add them to the second:
 ```shell
 sudo apt purge firefox flatpak gnome-session gnome-software gnome-software-plugin-flatpak qbittorrent vlc
 sudo apt-mark manual <packages to keep> # It can be ommited if you do not want to keep any package
@@ -101,6 +158,8 @@ Install it with the suggested options:
 ./install.sh -o solid -a alt -i ubuntu -m --right
 ```
 
+To apply the themes you might need the User Themes or the Night Theme Switcher GNOME Shell extensions.
+
 ## Suggested GNOME Shell extenstions
 - [Awesome Tiles](https://extensions.gnome.org/extension/4702/awesome-tiles/): Tile windows using keyboard shortcuts;
 - [Caffeine](https://extensions.gnome.org/extension/517/caffeine/): Disable the screensaver and auto suspend;
@@ -110,6 +169,12 @@ Install it with the suggested options:
 - [Tiling Assistant](https://extensions.gnome.org/extension/3733/tiling-assistant/): Expand GNOME's 2 column tiling and add a Windows-snap-assist-inspired popup;
 - [User Themes](https://extensions.gnome.org/extension/19/user-themes/): Load shell themes from user directory.
 
+To install the extensions you might need the GNOME Shell integration Firefox extension.
+
+Awesome Tiles and Tiling Assistant do similar things, and might not work well together. Which one do you choose is just a matter of taste.
+
+Both Night Theme Switcher and User Themes allow you to change the GNOME Shell theme. Which one do you choose is just a matter of what extra functionalities you want.
+
 ## Suggested Firefox extensions
 - [Bitwarden - Free Password Manager](https://addons.mozilla.org/firefox/addon/bitwarden-password-manager/): A secure and free password manager for all of your devices;
 - [GNOME Shell integration](https://addons.mozilla.org/firefox/addon/gnome-shell-integration/): This extension provides integration with GNOME Shell and the corresponding extensions repository;
@@ -118,7 +183,7 @@ Install it with the suggested options:
 sudo apt install chrome-gnome-shell
 ```
 - [GSConnect](https://addons.mozilla.org/firefox/addon/gsconnect/): Share links with GSConnect, direct to the browser or by SMS;
-    - First you need to install the GNOME Shell extension.
+    - First you need to install the GSConnect GNOME Shell extension.
 - [uBlock Origin](https://addons.mozilla.org/firefox/addon/ublock-origin/): Finally, an efficient wide-spectrum content blocker.
 
 ## Details
