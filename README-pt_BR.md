@@ -1,5 +1,19 @@
 # Custom Desktop
-O sistema desktop Ubuntu customizado.
+O sistema desktop Ubuntu customizado.  
+Copyright (C) 2021, 2022  Natan Junges &lt;natanajunges@gmail.com&gt;
+
+Custom Desktop é um software livre: você pode redistribuí-lo e/ou  
+modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
+publicado pela Free Software Foundation, seja a versão 3 da Licença  
+ou qualquer versão posterior.
+
+Custom Desktop é distribuído na esperança de que seja útil,  
+mas SEM QUALQUER GARANTIA; sem a garantia implícita de  
+COMERCIALIZAÇÃO OU ADEQUAÇÃO A UM DETERMINADO PROPÓSITO. Veja a  
+Licença Pública Geral GNU para obter mais detalhes.
+
+Você deve ter recebido uma cópia da Licença Pública Geral GNU  
+junto com Custom Desktop. Se não, veja &lt;https://www.gnu.org/licenses/&gt;.
 
 Substitui os metapacotes desktop originais do Ubuntu 21.10 ([`ubuntu-desktop-minimal`](https://packages.ubuntu.com/impish/ubuntu-desktop-minimal) e [`ubuntu-desktop`](https://packages.ubuntu.com/impish/ubuntu-desktop)). **Tenha em mente que eles também são usados para ajudar a garantir atualizações corretamente, então é recomendado que eles não sejam removidos**. **Apenas faça isto se você sabe o que está fazendo, e continue a seu próprio risco**. Para evitar quaisquer problemas, é recomendado instalá-los em uma nova instalação do Ubuntu 21.10.
 
