@@ -367,7 +367,6 @@ There are groups of packages that originally belonged to the `ubuntu-desktop-min
 
 | ubuntu-desktop-minimal | Description |
 |------------------------|-------------|
-| [app-install-data-partner](https://packages.ubuntu.com/jammy/app-install-data-partner) | Application Installer (data files for partner applications/repositories). |
 | [bc](https://packages.ubuntu.com/jammy/bc) | GNU bc arbitrary precision calculator language. |
 | [ghostscript-x](https://packages.ubuntu.com/jammy/ghostscript-x) | Interpreter for the PostScript language and for PDF - X11 support. |
 | [gvfs-fuse](https://packages.ubuntu.com/jammy/gvfs-fuse) | Userspace virtual filesystem - fuse server. |
@@ -401,6 +400,12 @@ There are groups of packages that originally belonged to the `ubuntu-desktop-min
 
 `bluez-cups` is repeated in [Bluetooth](#Bluetooth) to make visualization easier.
 
+#### Remote desktop
+
+| ubuntu-desktop | Description |
+|----------------|-------------|
+| [gnome-remote-desktop](https://packages.ubuntu.com/jammy/gnome-remote-desktop) | Remote desktop daemon for GNOME using PipeWire. |
+
 #### VM
 
 | ubuntu-desktop-minimal | Description |
@@ -413,6 +418,7 @@ There are groups of packages that originally belonged to the `ubuntu-desktop-min
 |------------------------|-------------|
 | [rfkill](https://packages.ubuntu.com/jammy/rfkill) | Tool for enabling and disabling wireless devices. **This package is also used by Bluetooth devices**. **It should only be removed if both Bluetooth and Wi-Fi are not used**. |
 | [wireless-tools](https://packages.ubuntu.com/jammy/wireless-tools) | Tools for manipulating Linux Wireless Extensions. |
+| [wpasupplicant](https://packages.ubuntu.com/jammy/wpasupplicant) | Client support for WPA and WPA2 (IEEE 802.11i). |
 
 `rfkill` is repeated in [Bluetooth](#Bluetooth) to make visualization easier.
 
@@ -466,7 +472,6 @@ There are groups of packages that originally belonged to the `ubuntu-desktop` me
 
 | ubuntu-desktop | Description |
 |----------------|-------------|
-| [gnome-remote-desktop](https://packages.ubuntu.com/jammy/gnome-remote-desktop) | Remote desktop daemon for GNOME using PipeWire. |
 | [remmina](https://packages.ubuntu.com/jammy/remmina) | GTK+ Remote Desktop Client. |
 
 ## Building

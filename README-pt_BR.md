@@ -365,7 +365,6 @@ Há grupos de pacotes que originalmente pertenciam ao metapacote `ubuntu-desktop
 
 | ubuntu-desktop-minimal | Descrição |
 |------------------------|-----------|
-| [app-install-data-partner](https://packages.ubuntu.com/jammy/app-install-data-partner) | Instalador de aplicativos (arquivos de dados para aplicações/repositorios parceiros). |
 | [bc](https://packages.ubuntu.com/jammy/bc) | Linguagem de calculadora de precisão arbitrária bc do GNU. |
 | [ghostscript-x](https://packages.ubuntu.com/jammy/ghostscript-x) | Interpretador para a linguagem PostScript e para PDF - suporte X11. |
 | [gvfs-fuse](https://packages.ubuntu.com/jammy/gvfs-fuse) | Sistema de arquivos virtual em espaço de usuário - servidor fuse. |
@@ -399,6 +398,12 @@ Há grupos de pacotes que originalmente pertenciam ao metapacote `ubuntu-desktop
 
 `bluez-cups` é repetido em [Bluetooth](#Bluetooth) para facilitar a visualização.
 
+#### Desktop remoto
+
+| ubuntu-desktop | Description |
+|----------------|-------------|
+| [gnome-remote-desktop](https://packages.ubuntu.com/jammy/gnome-remote-desktop) | Daemon de desktop remoto para GNOME usando PipeWire. |
+
 #### VM
 
 | ubuntu-desktop-minimal | Descrição |
@@ -411,6 +416,7 @@ Há grupos de pacotes que originalmente pertenciam ao metapacote `ubuntu-desktop
 |------------------------|-----------|
 | [rfkill](https://packages.ubuntu.com/jammy/rfkill) | Ferramenta para habilitar e desabilitar dispositivos sem fio. **Este pacote também é usado por dispositivos Bluetooth**. **Ele deveria ser removido apenas se tanto Bluetooth quanto Wi-Fi não forem usados**. |
 | [wireless-tools](https://packages.ubuntu.com/jammy/wireless-tools) | Ferramentas p/ manipular as Extensões Sem-fio do Linux (Linux Wireless Extensions). |
+| [wpasupplicant](https://packages.ubuntu.com/jammy/wpasupplicant) | Suporte ao cliente para WPA e WPA2 (IEEE 802.11i). |
 
 `rfkill` é repetido em [Bluetooth](#Bluetooth) para facilitar a visualização.
 
@@ -464,7 +470,6 @@ Há grupos de pacotes que originalmente pertenciam ao metapacote `ubuntu-desktop
 
 | ubuntu-desktop | Descrição |
 |----------------|-----------|
-| [gnome-remote-desktop](https://packages.ubuntu.com/jammy/gnome-remote-desktop) | Daemon de desktop remoto para GNOME usando PipeWire. |
 | [remmina](https://packages.ubuntu.com/jammy/remmina) | Cliente de área de trabalho remota em GTK+. |
 
 ## Construindo
