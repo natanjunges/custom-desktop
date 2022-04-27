@@ -1,0 +1,13 @@
+Section: admin
+Priority: optional
+Homepage: https://github.com/natanjunges/custom-desktop
+Bugs: https://github.com/natanjunges/custom-desktop/issues
+Standards-Version: 3.9.2
+Package: ubuntu-system-adjustments
+Version: 2021.12.17-una-dummy
+Maintainer: Natan Junges <natanajunges@gmail.com>
+Copyright: ../LICENSE
+Readme: ../README.md
+Description: Adjustments to the Ubuntu package base - dummy replacement
+ These adjustments modify some unwanted behaviors of the Ubuntu package base and are specific to this base.
+ This package is in fact a dummy replacement for the Linux Mint one, required for firefox from Linux Mint to work in Ubuntu.
