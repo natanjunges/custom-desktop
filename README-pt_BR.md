@@ -23,7 +23,7 @@ Baixe os arquivos `.deb` da [página de lançamentos](https://github.com/natanju
 
 Adicione o repositório upstream do Linux Mint Una (ele será usado para instalar o `firefox`):
 ```shell
-sudo tee /etc/apt/sources.list.d/mint-una.list <<< "deb http://packages.linuxmint.com una upstream"
+echo "deb http://packages.linuxmint.com una upstream" | sudo tee /etc/apt/sources.list.d/mint-una.list
 ```
 
 Adicione as chaves necessárias:
@@ -226,10 +226,10 @@ Para aplicar os temas você pode precisar das extensões User Themes ou Night Th
 ## Extensões GNOME Shell sugeridas
 - [Awesome Tiles](https://extensions.gnome.org/extension/4702/awesome-tiles/): Encaixe janelas usando atalhos do teclado;
 - [Caffeine](https://extensions.gnome.org/extension/517/caffeine/): Desabilita a proteção de tela e suspensão automática;
-- [Dash to Dock](https://extensions.gnome.org/extension/307/dash-to-dock/): Esta extensão move o dash para fora da visão geral transformando-o em uma dock para um lançamento mais fácil de aplicações e uma troca mais rápida entre janelas e desktops;
+- [~~Dash to Dock~~](https://extensions.gnome.org/extension/307/dash-to-dock/): Esta extensão move o dash para fora da visão geral transformando-o em uma dock para um lançamento mais fácil de aplicações e uma troca mais rápida entre janelas e desktops (**atualmente não suportada no GNOME 42**);
 - [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/): GSConnect é uma implementação completa do KDE Connect especialmente para o GNOME Shell com integração para Nautilus, Chrome e Firefox;
 - [Night Theme Switcher](https://extensions.gnome.org/extension/2236/night-theme-switcher/): Deixe seu desktop suave para os olhos, dia e noite;
-- [Tiling Assistant](https://extensions.gnome.org/extension/3733/tiling-assistant/): Expanda o encaixe de 2 colunas do GNOME e adicione um popup inspirado na assistência de encaixe de janelas do Windows;
+- [~~Tiling Assistant~~](https://extensions.gnome.org/extension/3733/tiling-assistant/): Expanda o encaixe de 2 colunas do GNOME e adicione um popup inspirado na assistência de encaixe de janelas do Windows (**atualmente não suportada no GNOME 42**);
 - [User Themes](https://extensions.gnome.org/extension/19/user-themes/): Carrega temas do shell do diretório do usuário.
 
 Para instalar as extensões você pode precisar da extensão GNOME Shell integration do Firefox.

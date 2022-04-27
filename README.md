@@ -25,7 +25,7 @@ Download the `.deb` files from the [releases page](https://github.com/natanjunge
 
 Add the upstream repository from Linux Mint Una (it will be used to install `firefox`):
 ```shell
-sudo tee /etc/apt/sources.list.d/mint-una.list <<< "deb http://packages.linuxmint.com una upstream"
+echo "deb http://packages.linuxmint.com una upstream" | sudo tee /etc/apt/sources.list.d/mint-una.list
 ```
 
 Add the required keys:
@@ -228,10 +228,10 @@ To apply the themes you might need the User Themes or the Night Theme Switcher G
 ## Suggested GNOME Shell extenstions
 - [Awesome Tiles](https://extensions.gnome.org/extension/4702/awesome-tiles/): Tile windows using keyboard shortcuts;
 - [Caffeine](https://extensions.gnome.org/extension/517/caffeine/): Disable the screensaver and auto suspend;
-- [Dash to Dock](https://extensions.gnome.org/extension/307/dash-to-dock/): This extension moves the dash out of the overview transforming it in a dock for an easier launching of applications and a faster switching between windows and desktops;
+- [~~Dash to Dock~~](https://extensions.gnome.org/extension/307/dash-to-dock/): This extension moves the dash out of the overview transforming it in a dock for an easier launching of applications and a faster switching between windows and desktops (**currently not supported in GNOME 42**);
 - [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/): GSConnect is a complete implementation of KDE Connect especially for GNOME Shell with Nautilus, Chrome and Firefox integration;
 - [Night Theme Switcher](https://extensions.gnome.org/extension/2236/night-theme-switcher/): Make your desktop easy on the eye, day and night;
-- [Tiling Assistant](https://extensions.gnome.org/extension/3733/tiling-assistant/): Expand GNOME's 2 column tiling and add a Windows-snap-assist-inspired popup;
+- [~~Tiling Assistant~~](https://extensions.gnome.org/extension/3733/tiling-assistant/): Expand GNOME's 2 column tiling and add a Windows-snap-assist-inspired popup (**currently not supported in GNOME 42**);
 - [User Themes](https://extensions.gnome.org/extension/19/user-themes/): Load shell themes from user directory.
 
 To install the extensions you might need the GNOME Shell integration Firefox extension.
