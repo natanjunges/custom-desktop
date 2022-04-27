@@ -63,7 +63,7 @@ sudo apt-mark auto ubuntu-system-adjustments
 
 Install `custom-desktop-minimal`:
 ```shell
-sudo apt install ./custom-desktop-minimal_*_all.deb
+sudo apt install ./custom-desktop-minimal_*_all.deb gnome-software-plugin-snap-
 ```
 
 If you only want the packages in the minimal set, install `custom-desktop` without the recommends:
@@ -215,30 +215,17 @@ sudo rm /etc/apt/sources.list.d/mint-una.list
 sudo apt update
 ```
 
-## Suggested GNOME Shell and GTK theme
-[WhiteSur](https://github.com/vinceliuice/WhiteSur-gtk-theme): MacOS Big Sur-like theme for Gnome desktops.
-
-Install it with the suggested options:
-```shell
-./install.sh -o solid -a alt -i ubuntu -m --right
-```
-
-To apply the themes you might need the User Themes or the Night Theme Switcher GNOME Shell extensions.
-
 ## Suggested GNOME Shell extenstions
 - [Awesome Tiles](https://extensions.gnome.org/extension/4702/awesome-tiles/): Tile windows using keyboard shortcuts;
 - [Caffeine](https://extensions.gnome.org/extension/517/caffeine/): Disable the screensaver and auto suspend;
 - [~~Dash to Dock~~](https://extensions.gnome.org/extension/307/dash-to-dock/): This extension moves the dash out of the overview transforming it in a dock for an easier launching of applications and a faster switching between windows and desktops (**currently not supported in GNOME 42**);
 - [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/): GSConnect is a complete implementation of KDE Connect especially for GNOME Shell with Nautilus, Chrome and Firefox integration;
 - [Night Theme Switcher](https://extensions.gnome.org/extension/2236/night-theme-switcher/): Make your desktop easy on the eye, day and night;
-- [~~Tiling Assistant~~](https://extensions.gnome.org/extension/3733/tiling-assistant/): Expand GNOME's 2 column tiling and add a Windows-snap-assist-inspired popup (**currently not supported in GNOME 42**);
-- [User Themes](https://extensions.gnome.org/extension/19/user-themes/): Load shell themes from user directory.
+- [~~Tiling Assistant~~](https://extensions.gnome.org/extension/3733/tiling-assistant/): Expand GNOME's 2 column tiling and add a Windows-snap-assist-inspired popup (**currently not supported in GNOME 42**).
 
 To install the extensions you might need the GNOME Shell integration Firefox extension.
 
 Awesome Tiles and Tiling Assistant do similar things, and might not work well together. Which one do you choose is just a matter of taste.
-
-Both Night Theme Switcher and User Themes allow you to change the GNOME Shell theme. Which one do you choose is just a matter of what extra functionalities you want.
 
 ## Suggested Firefox extensions
 - [Bitwarden - Free Password Manager](https://addons.mozilla.org/firefox/addon/bitwarden-password-manager/): A secure and free password manager for all of your devices;
