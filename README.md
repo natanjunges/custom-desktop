@@ -23,17 +23,25 @@ It replaces the Ubuntu 22.04 original desktop metapackages ([`ubuntu-desktop-min
 ### Install
 Download the `.deb` files from the [releases page](https://github.com/natanjunges/custom-desktop/releases) or [build them](#Building) yourself. Then open the terminal in the path where the `.deb` files are.
 
-Add the upstream repository from Linux Mint Una (it will be used to install `firefox`):
+Download the `linuxmint-keyring` package and add the required keys:
 ```shell
-echo "deb http://packages.linuxmint.com una upstream" | sudo tee /etc/apt/sources.list.d/mint-una.list
+wget http://packages.linuxmint.com/pool/main/l/linuxmint-keyring/linuxmint-keyring_2016.05.26_all.deb
+sudo apt install ./linuxmint-keyring_*_all.deb
+sudo apt-key del 451BBBF2
+sudo mv /usr/share/keyrings/linuxmint-keyring.gpg /usr/share/keyrings/linuxmint-keyring
+sudo gpg --dearmor /usr/share/keyrings/linuxmint-keyring
+sudo rm /usr/share/keyrings/linuxmint-keyring
 ```
 
-Add the required keys:
+Add the main and upstream repositories from Linux Mint Una (they will be used to install `firefox`):
 ```shell
-sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com A1715D88E1DF1F24 40976EAF437D05B5 3B4FE6ACC0B21F32 A6616109451BBBF2
+sudo tee /etc/apt/sources.list.d/mint-una.list << EOF
+deb [signed-by=/usr/share/keyrings/linuxmint-keyring.gpg] http://packages.linuxmint.com una main
+deb [signed-by=/usr/share/keyrings/linuxmint-keyring.gpg] http://packages.linuxmint.com una upstream
+EOF
 ```
 
-Pin the Linux Mint repository so it is only used for `chromium` and `firefox` (those Ubuntu packages are transitionals to snaps):
+Pin the Linux Mint repositories so they are only used for `chromium` and `firefox` (those Ubuntu packages are transitionals to snaps):
 ```shell
 sudo tee /etc/apt/preferences.d/pin-chromium-firefox << EOF
 Package: *
@@ -45,6 +53,10 @@ Pin: release o=linuxmint
 Pin-Priority: 1000
 
 Package: firefox
+Pin: release o=linuxmint
+Pin-Priority: 1000
+
+Package: linuxmint-keyring
 Pin: release o=linuxmint
 Pin-Priority: 1000
 EOF
@@ -203,12 +215,12 @@ sudo flatpak remove --all
 
 Remove the packages that remained. If you want to keep any of those packages, remove them from the first command and add them to the second:
 ```shell
-sudo apt purge firefox flatpak gnome-session gnome-software gnome-software-plugin-flatpak qbittorrent vlc
+sudo apt purge firefox flatpak gnome-session gnome-software gnome-software-plugin-flatpak linuxmint-keyring qbittorrent vlc
 sudo apt-mark manual <packages to keep> # It can be ommited if you do not want to keep any package
 sudo apt autoremove --purge
 ```
 
-Remove the Linux Mint repository:
+Remove the Linux Mint repositories:
 ```shell
 sudo rm /etc/apt/preferences.d/pin-chromium-firefox
 sudo rm /etc/apt/sources.list.d/mint-una.list
