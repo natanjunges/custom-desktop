@@ -33,9 +33,9 @@ EOF
 
 sudo apt update
 sudo apt install -y equivs
-equivs-build ./ubuntu-system-adjustments
+make -C ../ ubuntu-system-adjustments
 sudo apt purge -y autoconf automake autopoint autotools-dev binutils binutils-common binutils-x86-64-linux-gnu build-essential debhelper debugedit dh-autoreconf dh-strip-nondeterminism dpkg-dev dwz equivs fakeroot g++ g++-11 gcc gcc-11 gettext intltool-debian libalgorithm-diff-perl libalgorithm-diff-xs-perl libalgorithm-merge-perl libarchive-cpio-perl libarchive-zip-perl libasan6 libatomic1 libbinutils libc-dev-bin libc-devtools libc6-dev libcc1-0 libcrypt-dev libctf-nobfd0 libctf0 libdebhelper-perl libdpkg-perl libfakeroot libfile-fcntllock-perl libfile-stripnondeterminism-perl libgcc-11-dev libitm1 liblsan0 libltdl-dev libmail-sendmail-perl libnsl-dev libquadmath0 libsigsegv2 libstdc++-11-dev libsub-override-perl libsys-hostname-long-perl libtirpc-dev libtool libtsan0 libubsan1 linux-libc-dev lto-disabled-list m4 make manpages-dev po-debconf rpcsvc-proto
-sudo apt install -y ./ubuntu-system-adjustments_*-dummy_all.deb
+sudo apt install -y ../build/ubuntu-system-adjustments_*-dummy_all.deb
 sudo apt-mark auto ubuntu-system-adjustments
 sudo apt install -y firefox flatpak gnome-session gnome-software gnome-software-plugin-flatpak gnome-software-plugin-snap-
 
