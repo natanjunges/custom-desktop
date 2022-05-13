@@ -17,15 +17,14 @@ gnome-session
 *firefox
 *flatpak
 *gnome-software
-*gnome-software-plugin-flatpak
 EOF
 
 if [ "$1" = "--full" ]; then
-    tee -a ./finish-add <<- EOF
-    custom-desktop-minimal
-    *qbittorrent
-    *vlc
-    EOF
+    tee -a ./finish-add << EOF
+custom-desktop-minimal
+*qbittorrent
+*vlc
+EOF
 fi
 
 cat ./round-*-step-* ./finish-diff | grep "#" | tr -d "#" | sort > ./finish-remove
@@ -56,15 +55,15 @@ echo "Recommends: $(grep "*" ./finish-keep | tr -d "*" | sed ":a; $!N; s/\n/, /;
 echo "Provides: packagekit-installer" >> ./control
 
 if [ "$1" = "--full" ]; then
-    tee -a ./control <<- EOF
-    Task: ubuntu-desktop
-    Replaces: ubuntu-desktop
-    EOF
+    tee -a ./control << EOF
+Task: ubuntu-desktop
+Replaces: ubuntu-desktop
+EOF
 else
-    tee -a ./control <<- EOF
-    Task: ubuntu-desktop-minimal, ubuntu-desktop
-    Replaces: ubuntu-desktop-minimal
-    EOF
+    tee -a ./control << EOF
+Task: ubuntu-desktop-minimal, ubuntu-desktop
+Replaces: ubuntu-desktop-minimal
+EOF
 fi
 
 tee -a ./control << EOF
@@ -73,13 +72,13 @@ Readme: ../README.md
 EOF
 
 if [ "$1" = "--full" ]; then
-    tee -a ./control <<- EOF
-    Description: The custom Ubuntu desktop system
-     This package depends on all of the packages in the custom Ubuntu desktop system.
-    EOF
+    tee -a ./control << EOF
+Description: The custom Ubuntu desktop system
+ This package depends on all of the packages in the custom Ubuntu desktop system.
+EOF
 else
-    tee -a ./control <<- EOF
-    Description: The custom Ubuntu desktop minimal system
-     This package depends on all of the packages in the custom Ubuntu desktop minimal system.
-    EOF
+    tee -a ./control << EOF
+Description: The custom Ubuntu desktop minimal system
+ This package depends on all of the packages in the custom Ubuntu desktop minimal system.
+EOF
 fi
