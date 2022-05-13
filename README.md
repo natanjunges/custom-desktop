@@ -75,7 +75,8 @@ sudo apt-mark auto ubuntu-system-adjustments
 
 Install `custom-desktop-minimal`:
 ```shell
-sudo apt install ./custom-desktop-minimal_*_all.deb gnome-software-plugin-snap-
+sudo apt install ./custom-desktop-minimal_*_all.deb gnome-software-plugin-flatpak gnome-software-plugin-snap-
+sudo apt-mark auto gnome-software-plugin-flatpak
 ```
 
 If you only want the packages in the minimal set, install `custom-desktop` without the recommends:
@@ -215,7 +216,7 @@ sudo flatpak remove --all
 
 Remove the packages that remained. If you want to keep any of those packages, remove them from the first command and add them to the second:
 ```shell
-sudo apt purge firefox flatpak gnome-session gnome-software gnome-software-plugin-flatpak linuxmint-keyring qbittorrent vlc
+sudo apt purge firefox flatpak gnome-session gnome-software linuxmint-keyring qbittorrent vlc
 sudo apt-mark manual <packages to keep> # It can be ommited if you do not want to keep any package
 sudo apt autoremove --purge
 ```
@@ -267,7 +268,6 @@ These are the packages that are added to, removed from or replaced in the `custo
 | [~~libu2f-udev~~](https://packages.ubuntu.com/jammy/libu2f-udev) | | Universal 2nd Factor (U2F) - transitional package. **Transitional packages are not needed**. |
 | [~~snap:firefox~~](https://snapcraft.io/firefox) | [firefox](https://packages.ubuntu.com/jammy/firefox) | Safe and easy web browser from Mozilla. **Snap is not supported**. |
 | [~~snap:snap-store~~](https://snapcraft.io/snap-store) | [gnome-software](https://packages.ubuntu.com/jammy/gnome-software) | Software Center for GNOME. **Snap is not supported and GNOME Software supports native deb packages, snap and flatpak, while Snap Store only supports snap**. |
-| | [gnome-software-plugin-flatpak](https://packages.ubuntu.com/jammy/gnome-software-plugin-flatpak) | Flatpak support for GNOME Software. **Required for GNOME Software to support flatpak**. |
 | [~~snapd~~](https://packages.ubuntu.com/jammy/snapd) | [flatpak](https://packages.ubuntu.com/jammy/flatpak) | Application deployment framework for desktop apps. **Snap is not supported**. **Flatpak is used instead**. |
 | [~~ubuntu-session~~](https://packages.ubuntu.com/jammy/ubuntu-session) | [gnome-session](https://packages.ubuntu.com/jammy/gnome-session) | GNOME Session Manager - GNOME 3 session. **The custom Ubuntu session is not supported**. **The vanilla GNOME session is used instead**. |
 | [~~xcursor-themes~~](https://packages.ubuntu.com/jammy/xcursor-themes) | | Base X cursor themes. **X is not supported and this should not be in the minimal metapackage, as it is not used by most people**. **The Yaru theme is used instead**. |
@@ -490,3 +490,6 @@ make custom-desktop-minimal
 make custom-desktop
 make ubuntu-system-adjustments
 ```
+
+# Developing
+To customize the metapackages, you can use the `main.sh` script from the `builder/` folder. It requires [`dialog`](https://packages.ubuntu.com/jammy/dialog) to work.
