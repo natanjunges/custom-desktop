@@ -5,7 +5,7 @@ if ! which dialog > /dev/null; then
     exit 1
 fi
 
-op=$(dialog --stdout --title "Operation" --menu "Choose the desired operation:" 0 0 0 1 Initialize 2 "Execute round")
+op=$(dialog --stdout --title "Operation" --menu "Choose the desired operation:" 0 0 0 1 Initialize 2 "Execute round" 3 "Finish metapackage control file")
 err=$?
 
 if [ $err != 0 ]; then
@@ -103,5 +103,18 @@ case $op in
                 esac
             done
         done
+    ;;
+    3)
+        dialog --title "Finish - Full Package" --yesno "Build full package?" 0 0
+        err=$?
+        clear
+
+        if [ $err = 0 ]; then
+            ./finish.sh --full || exit 17
+        elif [ $err = 1 ]; then
+            ./finish.sh || exit 18
+        else
+            exit 19
+        fi
     ;;
 esac
