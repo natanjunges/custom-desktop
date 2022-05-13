@@ -39,7 +39,7 @@ sudo apt install -y ../build/ubuntu-system-adjustments_*-dummy_all.deb
 sudo apt-mark auto ubuntu-system-adjustments
 sudo apt install -y firefox flatpak gnome-session gnome-software gnome-software-plugin-flatpak gnome-software-plugin-snap-
 
-if [ $1 = --full ]; then
+if [ "$1" = "--full" ]; then
     sudo apt install -y qbittorrent vlc #only custom-desktop
 fi
 
