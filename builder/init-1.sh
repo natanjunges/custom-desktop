@@ -38,6 +38,7 @@ sudo apt purge -y autoconf automake autopoint autotools-dev binutils binutils-co
 sudo apt install -y ../build/ubuntu-system-adjustments_*-dummy_all.deb
 sudo apt-mark auto ubuntu-system-adjustments
 sudo apt install -y firefox flatpak gnome-session gnome-software gnome-software-plugin-flatpak gnome-software-plugin-snap-
+sudo apt-mark auto gnome-software-plugin-flatpak
 
 if [ "$1" = "--full" ]; then
     sudo apt install -y qbittorrent vlc #only custom-desktop
