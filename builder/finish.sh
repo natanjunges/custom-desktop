@@ -62,7 +62,7 @@ else
 fi
 
 tee -a ./control << EOF
-Version: 22.04.0
+Version: 22.04.0.1
 Maintainer: Natan Junges <natanajunges@gmail.com>
 EOF
 
