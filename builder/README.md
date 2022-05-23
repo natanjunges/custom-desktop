@@ -22,7 +22,7 @@ along with Custom Desktop Builder.  If not, see &lt;https://www.gnu.org/licenses
 
 ### In the guest OS
 - This project;
-- [`dialog`](https://packages.ubuntu.com/jammy/virt-manager).
+- [`dialog`](https://packages.ubuntu.com/jammy/dialog).
 
 ## Instructions
 Use the ISO image to install Ubuntu in a virtual machine. In the language selection, select English, as it will not have any additional language packages that might interfere with this process, and also ensures no inconsistencies in the outputs of commands used by these scripts. When choosing the normal/minimal install, it is not recommended to select the option to install third-party drivers and codecs, as they might interfere with this process as well. All the other options are customary.
@@ -59,4 +59,4 @@ Each of those rounds consists of up to five steps:
 - In the fourth step, only the packages with pre-depends or depends reverse dependencies that are not from the metapackages will be listed;
 - In the fifth step, only the packages with pre-depends or depends reverse dependencies that are from the metapackages will be listed, and they cannot be removed;
 
-Once the rounds are finished, rerun the main script. In the menus, select "Generate metapackage control file". It will generate a control file named `control` that can be used to replace `custom-desktop` or `custom-desktop-minimal` in the parent folder. Note that the suggests are not generated, and editing those control files is highly encouraged, mainly the `Homepage`, `Bugs`, `Package`, `Version`, `Maintainer` and `Description` sections.
+Once the rounds are finished, rerun the main script. In the menus, select "Generate metapackage control file". Whether or not the full package should be built depends on the same criteria of "Initialize - Part 1". It will generate a control file named `control` that can be used to replace `custom-desktop` or `custom-desktop-minimal` in the parent folder. Note that the suggests are not generated, and editing those control files is highly encouraged, mainly the `Homepage`, `Bugs`, `Package`, `Version`, `Maintainer` and `Description` sections.
