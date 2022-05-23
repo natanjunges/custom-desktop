@@ -21,7 +21,7 @@ if ! which dialog > /dev/null; then
     exit 1
 fi
 
-op=$(dialog --stdout --title "Operation" --menu "Choose the desired operation:" 0 0 0 1 Initialize 2 "Execute round" 3 "Finish metapackage control file")
+op=$(dialog --stdout --title Operation --menu "Choose the desired operation:" 0 0 0 1 Initialize 2 "Execute rounds" 3 "Generate metapackage control file")
 err=$?
 
 if [ $err != 0 ]; then
@@ -52,85 +52,75 @@ case $op in
                 else
                     exit 6
                 fi
+
+                echo "Logout and login into the GNOME session"
             ;;
-            2) clear; ./init-2.sh || exit 7;;
+            2) clear; ./init-2.sh && echo "Restart your machine" || exit 7;;
         esac
     ;;
     2)
-        round=$(dialog --stdout --title "Execute round - Current round" --inputbox "Round number:" 0 0 1)
-        err=$?
-
-        if [ $err != 0 ]; then
-            clear
-            exit 8
-        fi
-
         while :; do
-            step=$(dialog --stdout --title "Execute round - Round $round - Current step" --menu "Choose the desired step:" 0 0 0 1 "Step 1" 2 "Step 2" 3 "Step 3" 4 "Step 4" 5 "Step 5")
-            err=$?
-
-            if [ $err != 0 ]; then
-                clear
-                exit 9
-            fi
+            round=$(($(ls -1 -t ./round-*-step-* 2> /dev/null | head -n 1 | sed "s|./round-||; s/-step-[1-5]//" || echo 0) + 1))
+            step=0
 
             while :; do
-                cmd=$(dialog --stdout --title "Execute round - Round $round - Step $step - Command" --menu "Choose the desired command:" 0 0 0 1 Run 2 diff 3 rm 4 Edit 5 Purge 6 Exit)
-                err=$?
+                step=$((step + 1))
 
-                if [ $err != 0 ]; then
-                    clear
-                    exit 10
+                if [ $step = 2 -a -f ./round-*-step-2 ]; then
+                    step=3
                 fi
 
-                case $cmd in
-                    1)
-                        clear
-                        echo "Running round $round step $step..."
-                        "./step-$step.sh" > "./round-$round-step-$step" || exit 11
-                    ;;
-                    2)
-                        last_round=$(dialog --stdout --title "Execute round - Round $round - Step $step - diff - Last round" --inputbox "Last round number:" 0 0 1)
-                        err=$?
-                        clear
+                clear
+                echo "Running round $round step $step..."
+                read -p "Press Enter to continue or Ctrl+C to abort..." e
+                "./step-$step.sh" > "./round-$round-step-$step" || exit 8
 
-                        if [ $err != 0 ]; then
-                            exit 12
-                        fi
+                if [ $step = 4 ]; then
+                    echo "Running round $round step 5..."
+                    read -p "Press Enter to continue or Ctrl+C to abort..." e
+                    "./step-5.sh" > "./round-$round-step-5" || exit 9
+                fi
 
-                        diff "./round-$last_round-step-$step" "./round-$round-step-$step"
-                        err=$?
+                read -p "Press Enter to continue or Ctrl+C to abort..." e
+                clear
+                last_round=$(ls -1 -t "./round-"*"-step-$step" | head -n 2 | tail -n 1 | sed "s|./round-||; s/-step-$step//")
 
-                        if [ $err -gt 1 ]; then
-                            exit 13
-                        fi
+                if [ $last_round = $round ] || diff "./round-$last_round-step-$step" "./round-$round-step-$step" | grep -q "> "; then
+                    nano "./round-$round-step-$step" || exit 10
+                    echo "Purging packages from round $round step $step..."
+                    read -p "Press Enter to continue or Ctrl+C to abort..." e
+                    ./purge.sh < "./round-$round-step-$step" || exit 11
+                    read -p "Press Enter to continue or Ctrl+C to abort..." e
+                    break
+                else
+                    echo "Removing ./round-$round-step-$step..."
+                    read -p "Press Enter to continue or Ctrl+C to abort..." e
+                    rm "./round-$round-step-$step" || exit 12
 
-                        read -p "Press Enter to continue..." e
-                    ;;
-                    3) rm "./round-$round-step-$step" || exit 14;;
-                    4) nano "./round-$round-step-$step" || exit 15;;
-                    5)
-                        clear
-                        echo "Purging packages from round $round step $step..."
-                        ./purge.sh < "./round-$round-step-$step" || exit 16
-                        read -p "Press Enter to continue..." e
-                    ;;
-                    6) break;;
-                esac
+                    if [ $step = 4 ]; then
+                        echo "Removing ./round-$round-step-5..."
+                        read -p "Press Enter to continue or Ctrl+C to abort..." e
+                        rm "./round-$round-step-5" || exit 13
+                        read -p "Press Enter to continue or Ctrl+C to abort..." e
+                        break 2
+                    fi
+
+                    read -p "Press Enter to continue or Ctrl+C to abort..." e
+                fi
             done
         done
     ;;
     3)
-        dialog --title "Finish - Full Package" --yesno "Build full package?" 0 0
+        dialog --title "Generate - Full Package" --yesno "Build full package?" 0 0
         err=$?
         clear
 
         if [ $err = 0 ]; then
-            ./finish.sh --full || exit 17
+            ./finish.sh --full || exit 14
         elif [ $err = 1 ]; then
-            ./finish.sh || exit 18
+            ./finish.sh || exit 15
         else
-            exit 19
+            exit 16
         fi
     ;;
 esac
