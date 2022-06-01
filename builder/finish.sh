@@ -17,19 +17,19 @@
 # along with Custom Desktop Builder.  If not, see <https://www.gnu.org/licenses/>.
 
 set -e
-rm -f ./round-*-step-*-full
-cat ./round-*-step-*-diff | tr -d "#" | sort -u > ./finish-checked
+rm -f ./build/round-*-step-*-full
+cat ./build/round-*-step-*-diff | tr -d "#" | sort -u > ./build/finish-checked
 
 if [ "$1" = "--full" ]; then
-    LC_ALL=POSIX apt-cache depends ubuntu-desktop | grep "\(Depends\|Recommends\):" | sed "s/^  Depends: //; s/^  Recommends: /*/" | sort > ./finish-total
+    LC_ALL=POSIX apt-cache depends ubuntu-desktop | grep "\(Depends\|Recommends\):" | sed "s/^  Depends: //; s/^  Recommends: /*/" | sort > ./build/finish-total
 else
-    LC_ALL=POSIX apt-cache depends ubuntu-desktop-minimal | grep "\(Depends\|Recommends\):" | sed "s/^  Depends: //; s/^  Recommends: /*/" | sort > ./finish-total
+    LC_ALL=POSIX apt-cache depends ubuntu-desktop-minimal | grep "\(Depends\|Recommends\):" | sed "s/^  Depends: //; s/^  Recommends: /*/" | sort > ./build/finish-total
 fi
 
-diff ./finish-checked ./finish-total | grep "^> " | sed "s/^> /#/" > ./finish-diff
-rm ./finish-checked ./finish-total
+diff ./build/finish-checked ./build/finish-total | grep "^> " | sed "s/^> /#/" > ./build/finish-diff
+rm ./build/finish-checked ./build/finish-total
 
-tee ./finish-add << EOF
+tee ./build/finish-add << EOF
 *firefox
 *flatpak
 gnome-session
@@ -37,19 +37,19 @@ gnome-session
 EOF
 
 if [ "$1" = "--full" ]; then
-    tee -a ./finish-add << EOF
+    tee -a ./build/finish-add << EOF
 custom-desktop-minimal
 *qbittorrent
 *vlc
 EOF
 fi
 
-cat ./round-*-step-*-diff ./finish-diff | grep "^#" | tr -d "#" | sort > ./finish-remove
-cat ./round-*-step-*-diff ./finish-add | grep "^[^#]" | sort -u > ./finish-keep
-rm ./finish-diff ./finish-add
-nano ./finish-remove
+cat ./build/round-*-step-*-diff ./build/finish-diff | grep "^#" | tr -d "#" | sort > ./build/finish-remove
+cat ./build/round-*-step-*-diff ./build/finish-add | grep "^[^#]" | sort -u > ./build/finish-keep
+rm ./build/finish-diff ./build/finish-add
+nano ./build/finish-remove
 
-tee ./control << EOF
+tee ./build/control << EOF
 Section: metapackages
 Priority: optional
 Homepage: https://github.com/natanjunges/custom-desktop
@@ -58,45 +58,45 @@ Standards-Version: 3.9.2
 EOF
 
 if [ "$1" = "--full" ]; then
-    echo "Package: custom-desktop" >> ./control
+    echo "Package: custom-desktop" >> ./build/control
 else
-    echo "Package: custom-desktop-minimal" >> ./control
+    echo "Package: custom-desktop-minimal" >> ./build/control
 fi
 
-tee -a ./control << EOF
+tee -a ./build/control << EOF
 Version: 22.04.0.1
 Maintainer: Natan Junges <natanajunges@gmail.com>
 EOF
 
-echo "Depends: $(grep "^[^*]" ./finish-keep | sed ":a; $!N; s/\n/, /; ta")" >> ./control
-echo "Recommends: $(grep "^*" ./finish-keep | tr -d "*" | sed ":a; $!N; s/\n/, /; ta")" >> ./control
-echo "Suggests: $(grep "^[^#]" ./finish-remove | tr -d "*" | sed ":a; $!N; s/\n/, /; ta")" >> ./control
-echo "Provides: packagekit-installer" >> ./control
+echo "Depends: $(grep "^[^*]" ./build/finish-keep | sed ":a; $!N; s/\n/, /; ta")" >> ./build/control
+echo "Recommends: $(grep "^*" ./build/finish-keep | tr -d "*" | sed ":a; $!N; s/\n/, /; ta")" >> ./build/control
+echo "Suggests: $(grep "^[^#]" ./build/finish-remove | tr -d "*" | sed ":a; $!N; s/\n/, /; ta")" >> ./build/control
+echo "Provides: packagekit-installer" >> ./build/control
 
 if [ "$1" = "--full" ]; then
-    tee -a ./control << EOF
+    tee -a ./build/control << EOF
 Task: ubuntu-desktop
 Replaces: ubuntu-desktop
 EOF
 else
-    tee -a ./control << EOF
+    tee -a ./build/control << EOF
 Task: ubuntu-desktop-minimal, ubuntu-desktop
 Replaces: ubuntu-desktop-minimal
 EOF
 fi
 
-tee -a ./control << EOF
+tee -a ./build/control << EOF
 Copyright: ../LICENSE
 Readme: ../README.md
 EOF
 
 if [ "$1" = "--full" ]; then
-    tee -a ./control << EOF
+    tee -a ./build/control << EOF
 Description: The custom Ubuntu desktop system
  This package depends on all of the packages in the custom Ubuntu desktop system.
 EOF
 else
-    tee -a ./control << EOF
+    tee -a ./build/control << EOF
 Description: The custom Ubuntu desktop minimal system
  This package depends on all of the packages in the custom Ubuntu desktop minimal system.
 EOF

@@ -102,54 +102,56 @@ case $op in
         esac
     ;;
     2)
+        mkdir -p ./build/
+
         while :; do
-            round=$(($(ls -1 -t ./round-*-step-*-full 2> /dev/null | head -n 1 | sed "s|^./round-||; s/-step-[1-4]-full\$//" || echo 0) + 1))
+            round=$(($(ls -1 -t ./build/round-*-step-*-full 2> /dev/null | head -n 1 | sed "s|^./build/round-||; s/-step-[1-4]-full\$//" || echo 0) + 1))
             step=0
 
             while :; do
                 step=$((step + 1))
 
-                if [ $step = 2 -a -f ./round-*-step-2-full ]; then
+                if [ $step = 2 -a -f ./build/round-*-step-2-full ]; then
                     step=3
                 fi
 
                 clear
                 dialog_title "Running round $round step $step..."
                 wait_prompt
-                "./step-$step.sh" > "./round-$round-step-$step-full" || exit 6
+                "./step-$step.sh" > "./build/round-$round-step-$step-full" || exit 6
 
                 if [ $step = 4 ]; then
                     dialog_title "Running round $round step 5..."
                     wait_prompt
-                    "./step-5.sh" > "./round-$round-step-5-diff" || exit 7
+                    "./step-5.sh" > "./build/round-$round-step-5-diff" || exit 7
                 fi
 
                 wait_prompt
                 clear
-                last_round=$(ls -1 -t "./round-"*"-step-$step-full" | head -n 2 | tail -n 1 | sed "s|^./round-||; s/-step-$step-full\$//")
+                last_round=$(ls -1 -t "./build/round-"*"-step-$step-full" | head -n 2 | tail -n 1 | sed "s|^./build/round-||; s/-step-$step-full\$//")
 
-                if [ $last_round = $round ] || diff "./round-$last_round-step-$step-full" "./round-$round-step-$step-full" | grep -q "^> "; then
+                if [ $last_round = $round ] || diff "./build/round-$last_round-step-$step-full" "./build/round-$round-step-$step-full" | grep -q "^> "; then
                     if [ $last_round = $round ]; then
-                        cp "./round-$round-step-$step-full" "./round-$round-step-$step-diff"
+                        cp "./build/round-$round-step-$step-full" "./build/round-$round-step-$step-diff"
                     else
-                        diff "./round-$last_round-step-$step-full" "./round-$round-step-$step-full" | grep "^> " | sed "s/^> //" > "./round-$round-step-$step-diff"
+                        diff "./build/round-$last_round-step-$step-full" "./build/round-$round-step-$step-full" | grep "^> " | sed "s/^> //" > "./build/round-$round-step-$step-diff"
                     fi
 
-                    nano "./round-$round-step-$step-diff" || exit 8
+                    nano "./build/round-$round-step-$step-diff" || exit 8
                     dialog_title "Purging packages from round $round step $step..."
                     wait_prompt
-                    ./purge.sh < "./round-$round-step-$step-diff" || exit 9
+                    ./purge.sh < "./build/round-$round-step-$step-diff" || exit 9
                     wait_prompt
                     break
                 else
-                    dialog_title "Removing ./round-$round-step-$step-full..."
+                    dialog_title "Removing ./build/round-$round-step-$step-full..."
                     wait_prompt
-                    rm "./round-$round-step-$step-full" || exit 10
+                    rm "./build/round-$round-step-$step-full" || exit 10
 
                     if [ $step = 4 ]; then
-                        dialog_title "Removing ./round-$round-step-5-diff..."
+                        dialog_title "Removing ./build/round-$round-step-5-diff..."
                         wait_prompt
-                        rm "./round-$round-step-5-diff" || exit 11
+                        rm "./build/round-$round-step-5-diff" || exit 11
                         wait_prompt
                         break 2
                     fi
