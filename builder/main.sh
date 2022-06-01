@@ -66,26 +66,25 @@ dialog_yesno() {
 clear
 op=$(dialog_title Operation; dialog_menu "Choose the desired operation:" 1 Initialize 2 "Execute rounds" 3 "Generate metapackage control file")
 err=$?
+clear
 
 if [ $err != 0 ]; then
-    clear
     exit 1
 fi
 
 case $op in
     1)
-        clear
         part=$(dialog_title "Initialize - Part"; dialog_menu "Choose the desired part:" 1 "Part 1" 2 "Part 2")
         err=$?
+        clear
 
         if [ $err != 0 ]; then
-            clear
             exit 2
         fi
 
         case $part in
             1)
-                clear; dialog_title "Initialize - Part 1 - Extra Packages"; dialog_yesno "Install extra packages?"
+                dialog_title "Initialize - Part 1 - Extra Packages"; dialog_yesno "Install extra packages?"
                 err=$?
                 clear
                 dialog_title "Running initialization part 1..."
@@ -98,7 +97,7 @@ case $op in
 
                 echo "Logout and login into the GNOME session"
             ;;
-            2) clear; dialog_title "Running initialization part 2..."; ./init-2.sh && echo "Restart your machine" || exit 5;;
+            2) dialog_title "Running initialization part 2..."; ./init-2.sh && echo "Restart your machine" || exit 5;;
         esac
     ;;
     2)
@@ -118,7 +117,6 @@ case $op in
                 dialog_title "Running round $round step $step..."
                 wait_prompt
                 "./step-$step.sh" > "./build/round-$round-step-$step-full" || exit 6
-                wait_prompt
                 clear
                 last_round=$(ls -1 -t "./build/round-"*"-step-$step-full" | head -n 2 | tail -n 1 | sed "s|^./build/round-||; s/-step-$step-full\$//")
 
@@ -127,7 +125,7 @@ case $op in
                         dialog_title "Running round $round step 5..."
                         wait_prompt
                         "./step-5.sh" > "./build/round-$round-step-5-diff" || exit 7
-                        wait_prompt
+                        clear
                     fi
 
                     if [ $last_round = $round ]; then
@@ -140,13 +138,11 @@ case $op in
                     dialog_title "Purging packages from round $round step $step..."
                     wait_prompt
                     ./purge.sh < "./build/round-$round-step-$step-diff" || exit 9
-                    wait_prompt
                     break
                 else
                     dialog_title "Removing ./build/round-$round-step-$step-full..."
                     wait_prompt
                     rm "./build/round-$round-step-$step-full" || exit 10
-                    wait_prompt
 
                     if [ $step = 4 ]; then
                         break 2
@@ -156,7 +152,7 @@ case $op in
         done
     ;;
     3)
-        clear; dialog_title "Generate - Full Package"; dialog_yesno "Build full package?"
+        dialog_title "Generate - Full Package"; dialog_yesno "Build full package?"
         err=$?
         clear
         dialog_title "Generating control file..."
