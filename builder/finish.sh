@@ -17,21 +17,22 @@
 # along with Custom Desktop Builder.  If not, see <https://www.gnu.org/licenses/>.
 
 set -e
-cat ./round-*-step-* | tr -d "#" | sort -u > ./finish-checked
+rm ./round-*-step-*-full
+cat ./round-*-step-*-diff | tr -d "#" | sort -u > ./finish-checked
 
 if [ "$1" = "--full" ]; then
-    LC_ALL=POSIX apt-cache depends ubuntu-desktop | grep "  \(Depends\|Recommends\):" | sed "s/  Depends: //; s/  Recommends: /*/" | sort > ./finish-total
+    LC_ALL=POSIX apt-cache depends ubuntu-desktop | grep "\(Depends\|Recommends\):" | sed "s/^  Depends: //; s/^  Recommends: /*/" | sort > ./finish-total
 else
-    LC_ALL=POSIX apt-cache depends ubuntu-desktop-minimal | grep "  \(Depends\|Recommends\):" | sed "s/  Depends: //; s/  Recommends: /*/" | sort > ./finish-total
+    LC_ALL=POSIX apt-cache depends ubuntu-desktop-minimal | grep "\(Depends\|Recommends\):" | sed "s/^  Depends: //; s/^  Recommends: /*/" | sort > ./finish-total
 fi
 
-diff ./finish-checked ./finish-total | grep "> " | sed "s/> /#/" > ./finish-diff
+diff ./finish-checked ./finish-total | grep "^> " | sed "s/^> /#/" > ./finish-diff
 rm ./finish-checked ./finish-total
 
 tee ./finish-add << EOF
-gnome-session
 *firefox
 *flatpak
+gnome-session
 *gnome-software
 EOF
 
@@ -43,9 +44,10 @@ custom-desktop-minimal
 EOF
 fi
 
-cat ./round-*-step-* ./finish-diff | grep "#" | tr -d "#" | sort > ./finish-remove
-cat ./round-*-step-* ./finish-add | grep "^[^#]" | sort -u > ./finish-keep
+cat ./round-*-step-*-diff ./finish-diff | grep "^#" | tr -d "#" | sort > ./finish-remove
+cat ./round-*-step-*-diff ./finish-add | grep "^[^#]" | sort -u > ./finish-keep
 rm ./finish-diff ./finish-add
+nano ./finish-remove
 
 tee ./control << EOF
 Section: metapackages
@@ -67,7 +69,8 @@ Maintainer: Natan Junges <natanajunges@gmail.com>
 EOF
 
 echo "Depends: $(grep "^[^*]" ./finish-keep | sed ":a; $!N; s/\n/, /; ta")" >> ./control
-echo "Recommends: $(grep "*" ./finish-keep | tr -d "*" | sed ":a; $!N; s/\n/, /; ta")" >> ./control
+echo "Recommends: $(grep "^*" ./finish-keep | tr -d "*" | sed ":a; $!N; s/\n/, /; ta")" >> ./control
+echo "Suggests: $(grep "^[^#]" ./finish-remove | sed ":a; $!N; s/\n/, /; ta")" >> ./control
 echo "Provides: packagekit-installer" >> ./control
 
 if [ "$1" = "--full" ]; then

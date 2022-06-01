@@ -16,111 +16,157 @@
 # You should have received a copy of the GNU General Public License
 # along with Custom Desktop Builder.  If not, see <https://www.gnu.org/licenses/>.
 
-if ! which dialog > /dev/null; then
-    echo "dialog required."
-    exit 1
-fi
+wait_prompt() {
+    read -p "Press Enter to continue or Ctrl+C to abort..." e
+}
 
-op=$(dialog --stdout --title Operation --menu "Choose the desired operation:" 0 0 0 1 Initialize 2 "Execute rounds" 3 "Generate metapackage control file")
+dialog_title() {
+    echo "$1" >&2
+    echo >&2
+}
+
+dialog_menu() {
+    local opts=""
+    echo "$1" >&2
+    shift
+    echo >&2
+
+    while [ "$1" -a "$2" ]; do
+        if [ "$opts" ]; then
+            opts="$opts $1"
+        else
+            opts="$1"
+        fi
+
+        echo "[$1] $2" >&2
+        shift 2
+    done
+
+    echo >&2
+    read -p "? " opt
+
+    if echo "$opts" | grep -q -w "$opt"; then
+        echo $opt
+        return 0
+    else
+        return 1
+    fi
+}
+
+dialog_yesno() {
+    read -p "$1 [y/N] " yn
+
+    if [ "$yn" = "y" -o "$yn" = "Y" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+clear
+op=$(dialog_title Operation; dialog_menu "Choose the desired operation:" 1 Initialize 2 "Execute rounds" 3 "Generate metapackage control file")
 err=$?
 
 if [ $err != 0 ]; then
     clear
-    exit 2
+    exit 1
 fi
 
 case $op in
     1)
-        part=$(dialog --stdout --title "Initialize - Part" --menu "Choose the desired part:" 0 0 0 1 "Part 1" 2 "Part 2")
+        clear
+        part=$(dialog_title "Initialize - Part"; dialog_menu "Choose the desired part:" 1 "Part 1" 2 "Part 2")
         err=$?
 
         if [ $err != 0 ]; then
             clear
-            exit 3
+            exit 2
         fi
 
         case $part in
             1)
-                dialog --title "Initialize - Part 1 - Full Packages" --yesno "Install full packages?" 0 0
+                clear; dialog_title "Initialize - Part 1 - Extra Packages"; dialog_yesno "Install extra packages?"
                 err=$?
                 clear
 
                 if [ $err = 0 ]; then
-                    ./init-1.sh --full || exit 4
-                elif [ $err = 1 ]; then
-                    ./init-1.sh || exit 5
+                    ./init-1.sh --full || exit 3
                 else
-                    exit 6
+                    ./init-1.sh || exit 4
                 fi
 
                 echo "Logout and login into the GNOME session"
             ;;
-            2) clear; ./init-2.sh && echo "Restart your machine" || exit 7;;
+            2) clear; ./init-2.sh && echo "Restart your machine" || exit 5;;
         esac
     ;;
     2)
         while :; do
-            round=$(($(ls -1 -t ./round-*-step-* 2> /dev/null | head -n 1 | sed "s|./round-||; s/-step-[1-5]//" || echo 0) + 1))
+            round=$(($(ls -1 -t ./round-*-step-*-full 2> /dev/null | head -n 1 | sed "s|./round-||; s/-step-[1-5]-full//" || echo 0) + 1))
             step=0
 
             while :; do
                 step=$((step + 1))
 
-                if [ $step = 2 -a -f ./round-*-step-2 ]; then
+                if [ $step = 2 -a -f ./round-*-step-2-full ]; then
                     step=3
                 fi
 
                 clear
                 echo "Running round $round step $step..."
-                read -p "Press Enter to continue or Ctrl+C to abort..." e
-                "./step-$step.sh" > "./round-$round-step-$step" || exit 8
+                wait_prompt
+                "./step-$step.sh" > "./round-$round-step-$step-full" || exit 6
 
                 if [ $step = 4 ]; then
                     echo "Running round $round step 5..."
-                    read -p "Press Enter to continue or Ctrl+C to abort..." e
-                    "./step-5.sh" > "./round-$round-step-5" || exit 9
+                    wait_prompt
+                    "./step-5.sh" > "./round-$round-step-5-full" || exit 7
                 fi
 
-                read -p "Press Enter to continue or Ctrl+C to abort..." e
+                wait_prompt
                 clear
-                last_round=$(ls -1 -t "./round-"*"-step-$step" | head -n 2 | tail -n 1 | sed "s|./round-||; s/-step-$step//")
+                last_round=$(ls -1 -t "./round-"*"-step-$step-full" | head -n 2 | tail -n 1 | sed "s|./round-||; s/-step-$step-full//")
 
-                if [ $last_round = $round ] || diff "./round-$last_round-step-$step" "./round-$round-step-$step" | grep -q "> "; then
-                    nano "./round-$round-step-$step" || exit 10
+                if [ $last_round = $round ] || diff "./round-$last_round-step-$step-full" "./round-$round-step-$step-full" | grep -q "> "; then
+                    if [ $last_round = $round ]; then
+                        cp "./round-$round-step-$step-full" "./round-$round-step-$step-diff"
+                    else
+                        diff "./round-$last_round-step-$step-full" "./round-$round-step-$step-full" | grep -q "> " | sed "s/> //" > "./round-$round-step-$step-diff"
+                    fi
+
+                    nano "./round-$round-step-$step-diff" || exit 8
                     echo "Purging packages from round $round step $step..."
-                    read -p "Press Enter to continue or Ctrl+C to abort..." e
-                    ./purge.sh < "./round-$round-step-$step" || exit 11
-                    read -p "Press Enter to continue or Ctrl+C to abort..." e
+                    wait_prompt
+                    ./purge.sh < "./round-$round-step-$step-diff" || exit 9
+                    wait_prompt
                     break
                 else
-                    echo "Removing ./round-$round-step-$step..."
-                    read -p "Press Enter to continue or Ctrl+C to abort..." e
-                    rm "./round-$round-step-$step" || exit 12
+                    echo "Removing ./round-$round-step-$step-full..."
+                    wait_prompt
+                    rm "./round-$round-step-$step-full" || exit 10
 
                     if [ $step = 4 ]; then
-                        echo "Removing ./round-$round-step-5..."
-                        read -p "Press Enter to continue or Ctrl+C to abort..." e
-                        rm "./round-$round-step-5" || exit 13
-                        read -p "Press Enter to continue or Ctrl+C to abort..." e
+                        echo "Removing ./round-$round-step-5-full..."
+                        wait_prompt
+                        rm "./round-$round-step-5-full" || exit 11
+                        wait_prompt
                         break 2
                     fi
 
-                    read -p "Press Enter to continue or Ctrl+C to abort..." e
+                    wait_prompt
                 fi
             done
         done
     ;;
     3)
-        dialog --title "Generate - Full Package" --yesno "Build full package?" 0 0
+        clear; dialog_title "Generate - Full Package"; dialog_yesno "Build full package?"
         err=$?
         clear
 
         if [ $err = 0 ]; then
-            ./finish.sh --full || exit 14
-        elif [ $err = 1 ]; then
-            ./finish.sh || exit 15
+            ./finish.sh --full || exit 12
         else
-            exit 16
+            ./finish.sh || exit 13
         fi
     ;;
 esac

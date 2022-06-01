@@ -472,7 +472,7 @@ Há grupos de pacotes que originalmente pertenciam ao metapacote `ubuntu-desktop
 | [remmina](https://packages.ubuntu.com/jammy/remmina) | Cliente de área de trabalho remota em GTK+. |
 
 ## Construindo
-Para construir os metapacotes você precisa instalar [`equivs`](https://packages.ubuntu.com/jammy/equivs):
+Para construir os metapacotes a partir de seus arquivos de controle, você precisa instalar [`equivs`](https://packages.ubuntu.com/jammy/equivs):
 ```shell
 sudo apt install equivs
 ```
@@ -491,4 +491,4 @@ make ubuntu-system-adjustments
 
 
 # Desenvolvendo
-Para customizar os metapackages, você pode usar o script `main.sh` da pasta `builder/`. Ele requer [`dialog`](https://packages.ubuntu.com/jammy/dialog) para funcionar.
+Para customizar os metapackages, você pode usar o script `main.sh` da pasta `builder/`.

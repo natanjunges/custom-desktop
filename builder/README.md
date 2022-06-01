@@ -20,10 +20,6 @@ along with Custom Desktop Builder.  If not, see &lt;https://www.gnu.org/licenses
 - The Ubuntu desktop ISO of the version to be customized;
 - A virtual machine emulator (recommended [`virt-manager`](https://packages.ubuntu.com/jammy/virt-manager)).
 
-### In the guest OS
-- This project;
-- [`dialog`](https://packages.ubuntu.com/jammy/dialog).
-
 ## Instructions
 Use the ISO image to install Ubuntu in a virtual machine. In the language selection, select English, as it will not have any additional language packages that might interfere with this process, and also ensures no inconsistencies in the outputs of commands used by these scripts. When choosing the normal/minimal install, it is not recommended to select the option to install third-party drivers and codecs, as they might interfere with this process as well. All the other options are customary.
 
@@ -34,23 +30,20 @@ sudo apt upgrade
 sudo apt autoremove --purge
 ```
 
-Note that snaps are not updated, as they will soon be removed. Restart the virtual machine to load the most up to date software (most importantly the kernel). Install `dialog` with:
-```shell
-sudo apt install dialog
-```
+Note that snaps are not updated, as they will soon be removed. Restart the virtual machine to load the most up to date software (most importantly the kernel).
 
 Download this project's source from the [releases page](https://github.com/natanjunges/custom-desktop/releases). Extract it and open the terminal in the builder folder. Run the main script with:
 ```shell
 ./main.sh
 ```
 
-In the menus, select "Initialize", and then "Part 1". Whether or not the full packages should be installed depends on which version of Ubuntu was installed. If the minimal install was done, then no full packages should be installed. If the normal install was done instead, then the full packages should be installed. When the execution is finished, log out and back in, but into the GNOME session (Wayland) instead of the Ubuntu one.
+In the menus, select "Initialize", and then "Part 1". Whether or not the extra packages should be installed depends on which version of Ubuntu was installed. If the minimal install was done, then no extra packages should be installed. If the normal install was done instead, then the extra packages should be installed. When the execution is finished, log out and back in, but into the GNOME session (Wayland) instead of the Ubuntu one.
 
 Reopen the terminal in the builder folder and rerun the main script. In the menus, select "Initialize", and then "Part 2". When the execution is finished, restart the virtual machine to completely unload the removed software.
 
 Reopen the terminal in the builder folder and rerun the main script. In the menus, select "Execute rounds". When asked, pressing `Enter` will perform the described action. They can be aborted pressing `Ctrl`+`C`. This will iteratively run rounds that will detect the installed packages from the Ubuntu desktop metapackages and choose which ones to remove.
 
-First, it detects the installed packages. Then, it compares them with the ones from the previous round. If new packages are detected, it shows them to be chosen for removal. The packages are listed one per line, with the recommends starting with a `*`. The packages to be removed must be commented out (prefixing them with `#`, do not remove the `*`). **A package that was listed but not removed in a previous round should not be removed in a subsequent round, as it will result in inconsistencies in the generated control file**. Save the file with `Ctrl`+`S` and quit the editor with `Ctrl`+`X` and the commented packages will be purged, starting a new round.
+First, it detects the installed packages. Then, it compares them with the ones from the previous round. If new packages are detected, it shows them to be chosen for removal. The packages are listed one per line, with the recommends starting with a `*`. The packages to be removed must be commented out (prefixing them with `#`, do not remove the `*`). Save the file with `Ctrl`+`S` and quit the editor with `Ctrl`+`X` and the commented packages will be purged, starting a new round.
 
 Each of those rounds consists of up to five steps:
 - In the first step, only the packages with no reverse dependencies (no packages, besides the metapackages, that depend on them, be it pre-depends, depends, recommends or suggests) will be listed;
@@ -59,4 +52,4 @@ Each of those rounds consists of up to five steps:
 - In the fourth step, only the packages with pre-depends or depends reverse dependencies that are not from the metapackages will be listed;
 - In the fifth step, only the packages with pre-depends or depends reverse dependencies that are from the metapackages will be listed, and they cannot be removed;
 
-Once the rounds are finished, rerun the main script. In the menus, select "Generate metapackage control file". Whether or not the full package should be built depends on the same criteria of "Initialize - Part 1". It will generate a control file named `control` that can be used to replace `custom-desktop` or `custom-desktop-minimal` in the parent folder. Note that the suggests are not generated, and editing those control files is highly encouraged, mainly the `Homepage`, `Bugs`, `Package`, `Version`, `Maintainer` and `Description` sections.
+Once the rounds are finished, rerun the main script. In the menus, select "Generate metapackage control file". Whether or not the full package should be built depends on the same criteria of "Initialize - Part 1". The removed packages are shown to be added to the suggests, with the packages not to be added to the suggests being commented out. A control file named `control` will be generated, that can be used to replace `custom-desktop` or `custom-desktop-minimal` in the parent folder. Editing the control file is highly encouraged, mainly the `Homepage`, `Bugs`, `Package`, `Version`, `Maintainer` and `Description` sections.

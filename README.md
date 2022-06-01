@@ -474,7 +474,7 @@ There are groups of packages that originally belonged to the `ubuntu-desktop` me
 | [remmina](https://packages.ubuntu.com/jammy/remmina) | GTK+ Remote Desktop Client. |
 
 ## Building
-To build the metapackages you need to install [`equivs`](https://packages.ubuntu.com/jammy/equivs):
+To build the metapackages from their control files, you need to install [`equivs`](https://packages.ubuntu.com/jammy/equivs):
 ```shell
 sudo apt install equivs
 ```
@@ -492,4 +492,4 @@ make ubuntu-system-adjustments
 ```
 
 # Developing
-To customize the metapackages, you can use the `main.sh` script from the `builder/` folder. It requires [`dialog`](https://packages.ubuntu.com/jammy/dialog) to work.
+To customize the metapackages, you can use the `main.sh` script from the `builder/` folder.
