@@ -22,7 +22,7 @@ wait_prompt() {
 
 dialog_title() {
     echo "$1" >&2
-    echo >&2
+    echo "--------" >&2
 }
 
 dialog_menu() {
@@ -88,6 +88,7 @@ case $op in
                 clear; dialog_title "Initialize - Part 1 - Extra Packages"; dialog_yesno "Install extra packages?"
                 err=$?
                 clear
+                dialog_title "Running initialization part 1..."
 
                 if [ $err = 0 ]; then
                     ./init-1.sh --full || exit 3
@@ -97,7 +98,7 @@ case $op in
 
                 echo "Logout and login into the GNOME session"
             ;;
-            2) clear; ./init-2.sh && echo "Restart your machine" || exit 5;;
+            2) clear; dialog_title "Running initialization part 2..."; ./init-2.sh && echo "Restart your machine" || exit 5;;
         esac
     ;;
     2)
@@ -113,12 +114,12 @@ case $op in
                 fi
 
                 clear
-                echo "Running round $round step $step..."
+                dialog_title "Running round $round step $step..."
                 wait_prompt
                 "./step-$step.sh" > "./round-$round-step-$step-full" || exit 6
 
                 if [ $step = 4 ]; then
-                    echo "Running round $round step 5..."
+                    dialog_title "Running round $round step 5..."
                     wait_prompt
                     "./step-5.sh" > "./round-$round-step-5-diff" || exit 7
                 fi
@@ -135,18 +136,18 @@ case $op in
                     fi
 
                     nano "./round-$round-step-$step-diff" || exit 8
-                    echo "Purging packages from round $round step $step..."
+                    dialog_title "Purging packages from round $round step $step..."
                     wait_prompt
                     ./purge.sh < "./round-$round-step-$step-diff" || exit 9
                     wait_prompt
                     break
                 else
-                    echo "Removing ./round-$round-step-$step-full..."
+                    dialog_title "Removing ./round-$round-step-$step-full..."
                     wait_prompt
                     rm "./round-$round-step-$step-full" || exit 10
 
                     if [ $step = 4 ]; then
-                        echo "Removing ./round-$round-step-5-diff..."
+                        dialog_title "Removing ./round-$round-step-5-diff..."
                         wait_prompt
                         rm "./round-$round-step-5-diff" || exit 11
                         wait_prompt
@@ -162,6 +163,7 @@ case $op in
         clear; dialog_title "Generate - Full Package"; dialog_yesno "Build full package?"
         err=$?
         clear
+        dialog_title "Generating control file..."
 
         if [ $err = 0 ]; then
             ./finish.sh --full || exit 12

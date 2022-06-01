@@ -17,7 +17,7 @@
 # along with Custom Desktop Builder.  If not, see <https://www.gnu.org/licenses/>.
 
 set -e
-rm ./round-*-step-*-full
+rm -f ./round-*-step-*-full
 cat ./round-*-step-*-diff | tr -d "#" | sort -u > ./finish-checked
 
 if [ "$1" = "--full" ]; then
