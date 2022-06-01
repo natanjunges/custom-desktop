@@ -108,13 +108,12 @@ case $op in
             round=$(($(ls -1 -t ./build/round-*-step-*-full 2> /dev/null | head -n 1 | sed "s|^./build/round-||; s/-step-[1-4]-full\$//" || echo 0) + 1))
             step=0
 
+            if [ -f ./build/round-*-step-2-full ]; then
+                step=2
+            fi
+
             while :; do
                 step=$((step + 1))
-
-                if [ $step = 2 -a -f ./build/round-*-step-2-full ]; then
-                    step=3
-                fi
-
                 clear
                 dialog_title "Running round $round step $step..."
                 wait_prompt
