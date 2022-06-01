@@ -60,7 +60,7 @@ if [ "$1" = "--full" ]; then
     sudo apt install -y qbittorrent vlc #only custom-desktop
 fi
 
-sudo apt-mark manual $(LC_ALL=POSIX apt-cache depends --no-recommends --installed ubuntu-desktop-minimal | grep Depends: | sed "s/  Depends: //" | sed ":a; $!N; s/\n/ /; ta")
-sudo apt-mark manual $(LC_ALL=POSIX apt-cache depends --no-depends --installed ubuntu-desktop | grep Recommends: | sed "s/  Recommends: //" | sed ":a; $!N; s/\n/ /; ta")
+sudo apt-mark manual $(LC_ALL=POSIX apt-cache depends --no-recommends --installed ubuntu-desktop-minimal | grep Depends: | sed "s/^  Depends: //" | sed ":a; $!N; s/\n/ /; ta")
+sudo apt-mark manual $(LC_ALL=POSIX apt-cache depends --no-depends --installed ubuntu-desktop | grep Recommends: | sed "s/^  Recommends: //" | sed ":a; $!N; s/\n/ /; ta")
 sudo apt purge -y ubuntu-desktop ubuntu-desktop-minimal
 sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo

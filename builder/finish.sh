@@ -70,7 +70,7 @@ EOF
 
 echo "Depends: $(grep "^[^*]" ./finish-keep | sed ":a; $!N; s/\n/, /; ta")" >> ./control
 echo "Recommends: $(grep "^*" ./finish-keep | tr -d "*" | sed ":a; $!N; s/\n/, /; ta")" >> ./control
-echo "Suggests: $(grep "^[^#]" ./finish-remove | sed ":a; $!N; s/\n/, /; ta")" >> ./control
+echo "Suggests: $(grep "^[^#]" ./finish-remove | tr -d "*" | sed ":a; $!N; s/\n/, /; ta")" >> ./control
 echo "Provides: packagekit-installer" >> ./control
 
 if [ "$1" = "--full" ]; then

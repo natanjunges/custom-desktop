@@ -17,5 +17,5 @@
 # along with Custom Desktop Builder.  If not, see <https://www.gnu.org/licenses/>.
 
 set -e
-sudo apt purge -y $(grep "#" | tr -d "#*" | sed ":a; $!N; s/\n/ /; ta")
+sudo apt purge -y $(grep "^#" | tr -d "#*" | sed ":a; $!N; s/\n/ /; ta")
 sudo apt autoremove --purge -y

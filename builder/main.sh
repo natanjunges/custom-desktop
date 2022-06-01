@@ -102,7 +102,7 @@ case $op in
     ;;
     2)
         while :; do
-            round=$(($(ls -1 -t ./round-*-step-*-full 2> /dev/null | head -n 1 | sed "s|./round-||; s/-step-[1-5]-full//" || echo 0) + 1))
+            round=$(($(ls -1 -t ./round-*-step-*-full 2> /dev/null | head -n 1 | sed "s|^./round-||; s/-step-[1-4]-full\$//" || echo 0) + 1))
             step=0
 
             while :; do
@@ -120,18 +120,18 @@ case $op in
                 if [ $step = 4 ]; then
                     echo "Running round $round step 5..."
                     wait_prompt
-                    "./step-5.sh" > "./round-$round-step-5-full" || exit 7
+                    "./step-5.sh" > "./round-$round-step-5-diff" || exit 7
                 fi
 
                 wait_prompt
                 clear
-                last_round=$(ls -1 -t "./round-"*"-step-$step-full" | head -n 2 | tail -n 1 | sed "s|./round-||; s/-step-$step-full//")
+                last_round=$(ls -1 -t "./round-"*"-step-$step-full" | head -n 2 | tail -n 1 | sed "s|^./round-||; s/-step-$step-full\$//")
 
-                if [ $last_round = $round ] || diff "./round-$last_round-step-$step-full" "./round-$round-step-$step-full" | grep -q "> "; then
+                if [ $last_round = $round ] || diff "./round-$last_round-step-$step-full" "./round-$round-step-$step-full" | grep -q "^> "; then
                     if [ $last_round = $round ]; then
                         cp "./round-$round-step-$step-full" "./round-$round-step-$step-diff"
                     else
-                        diff "./round-$last_round-step-$step-full" "./round-$round-step-$step-full" | grep -q "> " | sed "s/> //" > "./round-$round-step-$step-diff"
+                        diff "./round-$last_round-step-$step-full" "./round-$round-step-$step-full" | grep "^> " | sed "s/^> //" > "./round-$round-step-$step-diff"
                     fi
 
                     nano "./round-$round-step-$step-diff" || exit 8
@@ -146,9 +146,9 @@ case $op in
                     rm "./round-$round-step-$step-full" || exit 10
 
                     if [ $step = 4 ]; then
-                        echo "Removing ./round-$round-step-5-full..."
+                        echo "Removing ./round-$round-step-5-diff..."
                         wait_prompt
-                        rm "./round-$round-step-5-full" || exit 11
+                        rm "./round-$round-step-5-diff" || exit 11
                         wait_prompt
                         break 2
                     fi
