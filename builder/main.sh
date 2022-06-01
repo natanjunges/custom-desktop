@@ -118,18 +118,18 @@ case $op in
                 dialog_title "Running round $round step $step..."
                 wait_prompt
                 "./step-$step.sh" > "./build/round-$round-step-$step-full" || exit 6
-
-                if [ $step = 4 ]; then
-                    dialog_title "Running round $round step 5..."
-                    wait_prompt
-                    "./step-5.sh" > "./build/round-$round-step-5-diff" || exit 7
-                fi
-
                 wait_prompt
                 clear
                 last_round=$(ls -1 -t "./build/round-"*"-step-$step-full" | head -n 2 | tail -n 1 | sed "s|^./build/round-||; s/-step-$step-full\$//")
 
                 if [ $last_round = $round ] || diff "./build/round-$last_round-step-$step-full" "./build/round-$round-step-$step-full" | grep -q "^> "; then
+                    if [ $step = 4 ]; then
+                        dialog_title "Running round $round step 5..."
+                        wait_prompt
+                        "./step-5.sh" > "./build/round-$round-step-5-diff" || exit 7
+                        wait_prompt
+                    fi
+
                     if [ $last_round = $round ]; then
                         cp "./build/round-$round-step-$step-full" "./build/round-$round-step-$step-diff"
                     else
@@ -146,16 +146,11 @@ case $op in
                     dialog_title "Removing ./build/round-$round-step-$step-full..."
                     wait_prompt
                     rm "./build/round-$round-step-$step-full" || exit 10
+                    wait_prompt
 
                     if [ $step = 4 ]; then
-                        dialog_title "Removing ./build/round-$round-step-5-diff..."
-                        wait_prompt
-                        rm "./build/round-$round-step-5-diff" || exit 11
-                        wait_prompt
                         break 2
                     fi
-
-                    wait_prompt
                 fi
             done
         done
@@ -167,9 +162,9 @@ case $op in
         dialog_title "Generating control file..."
 
         if [ $err = 0 ]; then
-            ./finish.sh --full || exit 12
+            ./finish.sh --full || exit 11
         else
-            ./finish.sh || exit 13
+            ./finish.sh || exit 12
         fi
     ;;
 esac
