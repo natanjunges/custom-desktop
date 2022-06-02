@@ -65,7 +65,7 @@ sudo apt install -y firefox flatpak gnome-session gnome-software gnome-software-
 sudo apt-mark auto gnome-software-plugin-flatpak
 
 if [ "$1" = "--full" ]; then
-    sudo apt install -y qbittorrent vlc #only custom-desktop
+    sudo apt install -y qbittorrent ubuntu-restricted-extras ttf-mscorefonts-installer- unrar- gstreamer1.0-vaapi- #only custom-desktop
 fi
 
 sudo apt-mark manual $(LC_ALL=POSIX apt-cache depends --no-recommends --installed ubuntu-desktop-minimal | grep Depends: | sed "s/^  Depends: //" | sed ":a; $!N; s/\n/ /; ta")

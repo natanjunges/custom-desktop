@@ -40,7 +40,7 @@ if [ "$1" = "--full" ]; then
     tee -a ./build/finish-add << EOF
 custom-desktop-minimal
 *qbittorrent
-*vlc
+*ubuntu-restricted-extras
 EOF
 fi
 
@@ -64,7 +64,7 @@ else
 fi
 
 tee -a ./build/control << EOF
-Version: 22.04.0.1
+Version: 22.04.1.1
 Maintainer: Natan Junges <natanajunges@gmail.com>
 EOF
 
