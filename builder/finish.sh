@@ -47,6 +47,7 @@ fi
 cat ./build/round-*-step-*-diff ./build/finish-diff | grep "^#" | tr -d "#" | sort > ./build/finish-remove
 cat ./build/round-*-step-*-diff ./build/finish-add | grep "^[^#]" | sort -u > ./build/finish-keep
 rm ./build/finish-diff ./build/finish-add
+sed -i "s/^\(*snapd\|*transmission-gtk\|ubuntu-desktop-minimal\|ubuntu-session\)/#\1/" ./build/finish-remove
 nano ./build/finish-remove
 
 tee ./build/control << EOF
