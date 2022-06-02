@@ -84,7 +84,7 @@ sudo apt install --no-install-recommends ./custom-desktop_*_all.deb
 
 Se, em vez disso, você quiser todos os pacotes, instale `custom-desktop` com as recomendações:
 ```shell
-sudo apt install ./custom-desktop_*_all.deb
+sudo apt install ./custom-desktop_*_all.deb ttf-mscorefonts-installer- unrar- gstreamer1.0-vaapi-
 ```
 
 Agora é a hora de remover os metapacotes originais do Ubuntu:
@@ -214,7 +214,7 @@ sudo flatpak remove --all
 
 Remova os pacotes que permaneceram. Se você quiser manter qualquer um desses pacotes, remova-os do primeiro comando e adicione-os ao segundo:
 ```shell
-sudo apt purge firefox flatpak gnome-session gnome-software linuxmint-keyring qbittorrent vlc
+sudo apt purge firefox flatpak gnome-session gnome-software linuxmint-keyring qbittorrent ubuntu-restricted-extras
 sudo apt-mark manual <pacotes para manter> # Pode ser omitido se você não quiser manter nenhum pacote
 sudo apt autoremove --purge
 ```
@@ -431,7 +431,7 @@ Estes são os pacotes que são adicionados ao, removidos do ou substituídos no 
 | [~~libreoffice-style-breeze~~](https://packages.ubuntu.com/jammy/libreoffice-style-breeze) | | Suíte de produtividade Office -- Estilo de símbolos Breeze. **KDE não é suportado, então não é usado pela maioria das pessoas**. |
 | [libwmf0.2-7-gtk](https://packages.ubuntu.com/jammy/libwmf0.2-7-gtk) | libwmf0.2-7-gtk | Biblioteca  de conversão de Windows metafile. **Movido do `custom-desktop-minimal`, já que é usado pelo LibreOffice**. |
 | [~~transmission-gtk~~](https://packages.ubuntu.com/jammy/transmission-gtk) | [qbittorrent](https://packages.ubuntu.com/jammy/qbittorrent) | Cliente bittorrent baseado na libtorrent-rasterbar com uma GUI Qt5. **Transmission não é suportado, já que é bugado e falta várias funcionalidades**. **qBittorrent é usado em vez disso, já que é um dos melhores clientes torrent já feitos**. |
-| | [vlc](https://packages.ubuntu.com/jammy/vlc) | Reprodutor e gerador de fluxo multimídia. **É mais rico em funcionalidades que o Totem, mas não pode substituí-lo já que o Totem suporta mais formatos de codec**. **No futuro apenas um dos dois deveria ser usado**. |
+| | [ubuntu-restricted-extras](https://packages.ubuntu.com/jammy/ubuntu-restricted-extras) | Codecs de mídia e fontes comumente usados para o Ubuntu. **Adiciona codecs proprietários para que o Totem e o Rhythmbox possam reproduzir a maioria dos formatos**. **As fontes extras e o unrar não são instalados**. |
 
 Há grupos de pacotes que originalmente pertenciam ao metapacote `ubuntu-desktop`, mas que são apenas sugeridos pelo `custom-desktop`. A sua remoção é opcional, dependendo de eles serem ou não necessários.
 
