@@ -118,9 +118,9 @@ case $op in
                 wait_prompt
 
                 if [ $step -gt 2 ]; then
-                    grep "^[^#]" ./build/round-*-step-2-full | tr -d "*" | ./step-$step.sh > ./build/round-$round-step-$step-full || exit 6
+                    grep "^[^#]" ./build/round-*-step-2-diff | tr -d "*" | sed ":a; $!N; s/\n/ /; ta" | ./step-$step.sh > ./build/round-$round-step-$step-full || exit 6
                 else
-                    ./step-$step.sh > ./build/round-$round-step-$step-full || exit 6
+                    ./step-$step.sh > ./build/round-$round-step-$step-full || exit 7
                 fi
 
                 clear
@@ -130,7 +130,7 @@ case $op in
                     if [ $step = 4 ]; then
                         dialog_title "Running round $round step 5..."
                         wait_prompt
-                        grep "^[^#]" ./build/round-*-step-2-full | tr -d "*" | ./step-5.sh > ./build/round-$round-step-5-diff || exit 7
+                        grep "^[^#]" ./build/round-*-step-2-diff | tr -d "*" | sed ":a; $!N; s/\n/ /; ta" | ./step-5.sh > ./build/round-$round-step-5-diff || exit 8
                         clear
                     fi
 
@@ -140,15 +140,15 @@ case $op in
                         diff ./build/round-$last_round-step-$step-full ./build/round-$round-step-$step-full | grep "^> " | sed "s/^> //" > ./build/round-$round-step-$step-diff
                     fi
 
-                    nano ./build/round-$round-step-$step-diff || exit 8
+                    nano ./build/round-$round-step-$step-diff || exit 9
                     dialog_title "Purging packages from round $round step $step..."
                     wait_prompt
-                    ./purge.sh < ./build/round-$round-step-$step-diff || exit 9
+                    ./purge.sh < ./build/round-$round-step-$step-diff || exit 10
                     break
                 else
                     dialog_title "Removing ./build/round-$round-step-$step-full..."
                     wait_prompt
-                    rm ./build/round-$round-step-$step-full || exit 10
+                    rm ./build/round-$round-step-$step-full || exit 11
 
                     if [ $step = 4 ]; then
                         break 2
@@ -164,9 +164,9 @@ case $op in
         dialog_title "Generating control file..."
 
         if [ $err = 0 ]; then
-            ./finish.sh --full || exit 11
+            ./finish.sh --full || exit 12
         else
-            ./finish.sh || exit 12
+            ./finish.sh || exit 13
         fi
     ;;
 esac
