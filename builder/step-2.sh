@@ -30,7 +30,7 @@ for pkg in $(LC_ALL=POSIX apt-cache depends --no-depends --installed ubuntu-desk
     fi
 done
 
-for pkg in $(LC_ALL=POSIX apt autoremove -s | grep "^Remv" | sed "s/^Remv //; s/ \[.*\$//"); do
+for pkg in $(LC_ALL=POSIX apt autoremove -s | grep ^Remv | sed "s/^Remv //; s/ \[.*\$//"); do
     if apt-cache rdepends $pkg | grep -q "^  ubuntu-desktop"; then
         sudo apt-mark manual $pkg > /dev/null
 

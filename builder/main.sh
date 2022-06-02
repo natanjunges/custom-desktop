@@ -22,7 +22,7 @@ wait_prompt() {
 
 dialog_title() {
     echo "$1" >&2
-    echo "--------" >&2
+    echo -------- >&2
 }
 
 dialog_menu() {
@@ -45,7 +45,7 @@ dialog_menu() {
     echo >&2
     read -p "? " opt
 
-    if echo "$opts" | grep -q -w "$opt"; then
+    if echo $opts | grep -q -w "$opt"; then
         echo $opt
         return 0
     else
@@ -56,7 +56,7 @@ dialog_menu() {
 dialog_yesno() {
     read -p "$1 [y/N] " yn
 
-    if [ "$yn" = "y" -o "$yn" = "Y" ]; then
+    if [ "$yn" = y -o "$yn" = Y ]; then
         return 0
     else
         return 1
@@ -95,9 +95,9 @@ case $op in
                     ./init-1.sh || exit 4
                 fi
 
-                echo "Logout and login into the GNOME session"
+                echo Logout and login into the GNOME session
             ;;
-            2) dialog_title "Running initialization part 2..."; ./init-2.sh && echo "Restart your machine" || exit 5;;
+            2) dialog_title "Running initialization part 2..."; ./init-2.sh && echo Restart your machine || exit 5;;
         esac
     ;;
     2)
@@ -116,33 +116,39 @@ case $op in
                 clear
                 dialog_title "Running round $round step $step..."
                 wait_prompt
-                "./step-$step.sh" > "./build/round-$round-step-$step-full" || exit 6
-                clear
-                last_round=$(ls -1 -t "./build/round-"*"-step-$step-full" | head -n 2 | tail -n 1 | sed "s|^./build/round-||; s/-step-$step-full\$//")
 
-                if [ $last_round = $round ] || diff "./build/round-$last_round-step-$step-full" "./build/round-$round-step-$step-full" | grep -q "^> "; then
+                if [ $step -gt 2 ]; then
+                    grep "^[^#]" ./build/round-*-step-2-full | tr -d "*" | ./step-$step.sh > ./build/round-$round-step-$step-full || exit 6
+                else
+                    ./step-$step.sh > ./build/round-$round-step-$step-full || exit 6
+                fi
+
+                clear
+                last_round=$(ls -1 -t ./build/round-*-step-$step-full | head -n 2 | tail -n 1 | sed "s|^./build/round-||; s/-step-$step-full\$//")
+
+                if [ $last_round = $round ] || diff ./build/round-$last_round-step-$step-full ./build/round-$round-step-$step-full | grep -q "^> "; then
                     if [ $step = 4 ]; then
                         dialog_title "Running round $round step 5..."
                         wait_prompt
-                        "./step-5.sh" > "./build/round-$round-step-5-diff" || exit 7
+                        grep "^[^#]" ./build/round-*-step-2-full | tr -d "*" | ./step-5.sh > ./build/round-$round-step-5-diff || exit 7
                         clear
                     fi
 
                     if [ $last_round = $round ]; then
-                        cp "./build/round-$round-step-$step-full" "./build/round-$round-step-$step-diff"
+                        cp ./build/round-$round-step-$step-full ./build/round-$round-step-$step-diff
                     else
-                        diff "./build/round-$last_round-step-$step-full" "./build/round-$round-step-$step-full" | grep "^> " | sed "s/^> //" > "./build/round-$round-step-$step-diff"
+                        diff ./build/round-$last_round-step-$step-full ./build/round-$round-step-$step-full | grep "^> " | sed "s/^> //" > ./build/round-$round-step-$step-diff
                     fi
 
-                    nano "./build/round-$round-step-$step-diff" || exit 8
+                    nano ./build/round-$round-step-$step-diff || exit 8
                     dialog_title "Purging packages from round $round step $step..."
                     wait_prompt
-                    ./purge.sh < "./build/round-$round-step-$step-diff" || exit 9
+                    ./purge.sh < ./build/round-$round-step-$step-diff || exit 9
                     break
                 else
                     dialog_title "Removing ./build/round-$round-step-$step-full..."
                     wait_prompt
-                    rm "./build/round-$round-step-$step-full" || exit 10
+                    rm ./build/round-$round-step-$step-full || exit 10
 
                     if [ $step = 4 ]; then
                         break 2

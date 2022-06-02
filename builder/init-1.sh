@@ -64,7 +64,7 @@ sudo apt-mark auto ubuntu-system-adjustments
 sudo apt install -y firefox flatpak gnome-session gnome-software gnome-software-plugin-flatpak gnome-software-plugin-snap-
 sudo apt-mark auto gnome-software-plugin-flatpak
 
-if [ "$1" = "--full" ]; then
+if [ "$1" = --full ]; then
     sudo apt install -y qbittorrent ubuntu-restricted-extras ttf-mscorefonts-installer- unrar- gstreamer1.0-vaapi- #only custom-desktop
 fi
 
