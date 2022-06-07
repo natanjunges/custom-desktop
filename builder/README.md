@@ -32,9 +32,9 @@ sudo apt autoremove --purge
 
 Note that snaps are not updated, as they will soon be removed. Restart the virtual machine to load the most up to date software (most importantly the kernel).
 
-Download this project's source from the [releases page](https://github.com/natanjunges/custom-desktop/releases). Extract it and open the terminal in the builder folder. Run the main script with:
+Download this project's source from the [releases page](https://github.com/natanjunges/custom-desktop/releases). Extract it and open the terminal in the `builder` folder. Download `ubuntu-system-adjustments` from the releases page and save it in `builder/build`. Run the main script with:
 ```shell
-./main.sh
+./main
 ```
 
 In the menus, select "Initialize", and then "Part 1". Whether or not the extra packages should be installed depends on which version of Ubuntu was installed. If the minimal install was done, then no extra packages should be installed. If the normal install was done instead, then the extra packages should be installed. When the execution is finished, log out and back in, but into the GNOME session (Wayland) instead of the Ubuntu one.

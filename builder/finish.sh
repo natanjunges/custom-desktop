@@ -17,6 +17,12 @@
 # along with Custom Desktop Builder.  If not, see <https://www.gnu.org/licenses/>.
 
 set -e
+
+if ! ls ./build/round-*-step-*-diff > /dev/null; then
+    echo "./build/round-*-step-*-diff not found"
+    exit 1
+fi
+
 rm -f ./build/round-*-step-*-full
 cat ./build/round-*-step-*-diff | tr -d "#" | sort > ./build/finish-checked
 
