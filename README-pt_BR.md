@@ -370,4 +370,4 @@ make ubuntu-system-adjustments
 
 
 # Desenvolvendo
-Para customizar os metapacotes, leia o [README](builder/README.md) na pasta `builder/`.
+Para customizar os metapacotes, leia o [README](builder/README-pt_BR.md) na pasta `builder/`.

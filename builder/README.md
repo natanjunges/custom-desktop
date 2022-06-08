@@ -1,4 +1,5 @@
 # Custom Desktop Builder
+[Ler em português do Brasil](README-pt_BR.md).
 
 Scripts to build the metapackages for Custom Desktop.  
 Copyright (C) 2022  Natan Junges &lt;natanajunges@gmail.com&gt;
@@ -41,7 +42,7 @@ In the menus, select "Initialize", and then "Part 1". Whether or not the extra p
 
 Reopen the terminal in the `builder` folder and rerun the main script. In the menus, select "Initialize", and then "Part 2". When the execution is finished, restart the virtual machine to completely unload the removed software.
 
-Reopen the terminal in the `builder` folder and rerun the main script. In the menus, select "Execute rounds". When asked, pressing `Enter` will perform the described action. They can be aborted pressing `Ctrl`+`C`. This will iteratively run rounds that will detect the installed packages from the Ubuntu desktop metapackages and choose which ones to remove.
+Reopen the terminal in the `builder` folder and rerun the main script. In the menu, select "Execute rounds". When asked, pressing `Enter` will perform the described action. They can be aborted pressing `Ctrl`+`C`. This will iteratively run rounds that will detect the installed packages from the Ubuntu desktop metapackages and choose which ones to remove.
 
 First, it detects the installed packages. Then, it compares them with the ones from the previous round. If new packages are detected, it shows them to be chosen for removal. The packages are listed one per line, with the recommends starting with a `*`. The packages to be removed must be commented out (prefixing them with `#`, do not remove the `*`). Save the file with `Ctrl`+`S` and quit the editor with `Ctrl`+`X` and the commented packages will be purged, starting a new round.
 
@@ -52,4 +53,4 @@ Each of those rounds consists of up to five steps:
 - In the fourth step, only the packages with pre-depends or depends reverse dependencies that are not from the metapackages will be listed;
 - In the fifth step, only the packages with pre-depends or depends reverse dependencies that are from the metapackages will be listed, and they cannot be removed;
 
-Once the rounds are finished, rerun the main script. In the menus, select "Generate metapackage control file". Whether or not the full package should be built depends on the same criteria of "Initialize - Part 1". The removed packages are shown to be added to the suggests, with the packages not to be added to the suggests being commented out. A control file named `control` will be generated, that can be used to replace `custom-desktop` or `custom-desktop-minimal` in the parent folder. Editing the control file is highly encouraged, mainly the `Homepage`, `Bugs`, `Package`, `Version`, `Maintainer` and `Description` sections.
+Once the rounds are finished, rerun the main script. In the menu, select "Generate metapackage control file". Whether or not the full package should be built depends on the same criteria of "Initialize - Part 1". The removed packages are shown to be added to the suggests, with the packages not to be added to the suggests being commented out. A control file named `build/control` will be generated, that can be used to replace `custom-desktop` or `custom-desktop-minimal` in the parent folder. Editing the control file is highly encouraged, mainly the `Homepage`, `Bugs`, `Package`, `Version`, `Maintainer` and `Description` sections.
