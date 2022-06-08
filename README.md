@@ -330,6 +330,7 @@ There are groups of packages that originally belonged to the `ubuntu-desktop` me
 | ubuntu-desktop | Description |
 |----------------|-------------|
 | [cheese](https://packages.ubuntu.com/jammy/cheese) | Tool to take pictures and videos from your webcam. |
+| [eog](https://packages.ubuntu.com/jammy/eog) | Eye of GNOME graphics viewer program. **Removed as shotwell does what it does and more**. |
 | [simple-scan](https://packages.ubuntu.com/jammy/simple-scan) | Simple Scanning Utility. |
 
 #### Email

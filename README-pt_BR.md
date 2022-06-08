@@ -328,6 +328,7 @@ Há grupos de pacotes que originalmente pertenciam ao metapacote `ubuntu-desktop
 | ubuntu-desktop | Descrição |
 |----------------|-----------|
 | [cheese](https://packages.ubuntu.com/jammy/cheese) | Ferramenta para capturar fotos e vídeos a partir da webcam. |
+| [eog](https://packages.ubuntu.com/jammy/eog) | Programa visualizador de gráficos "Eye of GNOME". **Removido já que shotwell faz o que ele faz e mais**. |
 | [simple-scan](https://packages.ubuntu.com/jammy/simple-scan) | Utilitário Simples de Escaneamento (Scanning). |
 
 #### Email

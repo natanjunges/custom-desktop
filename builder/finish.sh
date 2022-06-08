@@ -71,7 +71,7 @@ else
 fi
 
 tee -a ./build/control << EOF
-Version: 22.04.1.1
+Version: 22.04.2
 Maintainer: Natan Junges <natanajunges@gmail.com>
 EOF
 
