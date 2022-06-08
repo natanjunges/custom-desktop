@@ -21,139 +21,18 @@ It replaces the Ubuntu 22.04 original desktop metapackages ([`ubuntu-desktop-min
 
 ## How to use
 ### Install
-Download the `.deb` files from the [releases page](https://github.com/natanjunges/custom-desktop/releases) or [build them](#Building) yourself. Then open the terminal in the path where the `.deb` files are.
-
-Download the `linuxmint-keyring` package and add the required keys:
+Download this project's source from the [releases page](https://github.com/natanjunges/custom-desktop/releases). Extract it and open the terminal in the `installer` folder. Download the `.deb` files from the releases page and save them in `installer/build`. Run the main script with:
 ```shell
-wget http://packages.linuxmint.com/pool/main/l/linuxmint-keyring/linuxmint-keyring_2016.05.26_all.deb
-sudo apt install ./linuxmint-keyring_*_all.deb
-sudo apt-key del 451BBBF2
-sudo mv /usr/share/keyrings/linuxmint-keyring.gpg /usr/share/keyrings/linuxmint-keyring
-sudo gpg --dearmor /usr/share/keyrings/linuxmint-keyring
-sudo rm /usr/share/keyrings/linuxmint-keyring
+./main
 ```
 
-Add the main and upstream repositories from Linux Mint Una (they will be used to install `firefox`):
-```shell
-sudo tee /etc/apt/sources.list.d/mint-una.list << EOF
-deb [signed-by=/usr/share/keyrings/linuxmint-keyring.gpg] http://packages.linuxmint.com una main
-deb [signed-by=/usr/share/keyrings/linuxmint-keyring.gpg] http://packages.linuxmint.com una upstream
-EOF
-```
+In the menu, select "Add repositories and install". Whether or not the full package should be installed depends on which version of Ubuntu was installed. If the minimal install was done, then no full package should be installed. If the normal install was done instead, then the full package should be installed. When the execution is finished, log out and back in, but into the GNOME session (Wayland) instead of the Ubuntu one.
 
-Pin the Linux Mint repositories so they are only used for `chromium` and `firefox` (those Ubuntu packages are transitionals to snaps):
-```shell
-sudo tee /etc/apt/preferences.d/pin-chromium-firefox << EOF
-Package: *
-Pin: release o=linuxmint
-Pin-Priority: -1
-
-Package: chromium
-Pin: release o=linuxmint
-Pin-Priority: 1000
-
-Package: firefox
-Pin: release o=linuxmint
-Pin-Priority: 1000
-
-Package: linuxmint-keyring
-Pin: release o=linuxmint
-Pin-Priority: 1000
-EOF
-```
-
-Update the repositories for changes to take effect:
-```shell
-sudo apt update
-```
-
-Install the `ubuntu-system-adjustments` dummy package and mark it as automatic (it is a dependency of `firefox`):
-```shell
-sudo apt install ./ubuntu-system-adjustments_*-dummy_all.deb
-sudo apt-mark auto ubuntu-system-adjustments
-```
-
-Install `custom-desktop-minimal`:
-```shell
-sudo apt install ./custom-desktop-minimal_*_all.deb gnome-software-plugin-flatpak gnome-software-plugin-snap-
-sudo apt-mark auto gnome-software-plugin-flatpak
-```
-
-If you only want the packages in the minimal set, install `custom-desktop` without the recommends:
-```shell
-sudo apt install --no-install-recommends ./custom-desktop_*_all.deb
-```
-
-If you want all the packages instead, install `custom-desktop` with the recommends:
-```shell
-sudo apt install ./custom-desktop_*_all.deb ttf-mscorefonts-installer- unrar- gstreamer1.0-vaapi-
-```
-
-Now it is time to remove the Ubuntu original metapackages:
-```shell
-sudo apt purge ubuntu-desktop ubuntu-desktop-minimal
-```
-
-Add the Flathub repository to flatpak:
-```shell
-sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-```
-
-Log out and back in, but into the GNOME session (Wayland) instead of the Ubuntu one.
-
-Add a custom user profile to dconf/gsettings:
-```shell
-sudo tee /etc/dconf/profile/user << EOF
-user-db:user
-system-db:local
-EOF
-sudo mkdir /etc/dconf/db/local.d
-```
-
-Change the icon and cursor themes to Yaru:
-```shell
-sudo tee -a /etc/dconf/db/local.d/01-custom-desktop << EOF
-[org/gnome/desktop/interface]
-icon-theme='Yaru'
-cursor-theme='Yaru'
-EOF
-sudo dconf update
-```
-
-For each user in the system, run:
-```shell
-gsettings reset org.gnome.desktop.interface icon-theme
-gsettings reset org.gnome.desktop.interface cursor-theme
-```
-
-Replace the favorites for `snap:firefox` and `snap:snap-store` with the ones for `firefox` and `gnome-software`, respectively:
-```shell
-sudo tee -a /etc/dconf/db/local.d/01-custom-desktop << EOF
-[org/gnome/shell]
-favorite-apps=$(sudo gsettings get org.gnome.shell favorite-apps | sed "s/firefox_firefox/firefox/; s/snap-store_ubuntu-software/org.gnome.Software/")
-EOF
-sudo dconf update
-```
-
-For each user in the system, do the following:
-- If you want to preserve the customizations made to the favorites, run:
-```shell
-gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed "s/firefox_firefox/firefox/; s/snap-store_ubuntu-software/org.gnome.Software/")"
-```
-- If instead you want to reset them to the default values (eg. in a fresh install), run:
-```shell
-gsettings reset org.gnome.shell favorite-apps
-```
-
-Log out and back into the GNOME session (Wayland) to apply changes.
+Reopen the terminal in the `installer` folder and rerun the main script. In the menu, select "Change icon and cursor theme and favorite apps". Then, for each user in the system, reopen the terminal in the `installer` folder and rerun the main script. In the menu, select "Apply changes (per user)". Whether or not the favorite apps layout should be preserved depends on the user's preference. In a fresh install, it should not be preserved. When the execution is finished for each user, log out and back into the GNOME session (Wayland) to apply changes.
 
 If you are not doing this in a fresh install, you might want to replace the installed snaps with their equivalent flatpaks: [popey/unsnap](https://github.com/popey/unsnap). **Keep in mind that this tool is still in "pre-alpha" stage, and might not work as intended**. **You can [contribute](https://github.com/popey/unsnap#contributions) testing it and reporting bugs or missing flatpaks**. Only the generated scripts `00-backup` and `03-install-flatpaks` are required to be run, as the rest is already done here. `snap:firefox` is already replaced with the native deb package, so you should remove it from the generated `03-install-flatpaks` script.
 
-Remove the packages that remained (you might also want to remove `fonts-opensymbol`, `gnome-disk-utility` and `libwmf0.2-7-gtk` if you only want the packages in the minimal set). If you want to remove any of the [suggested packages](#Details), add them to the first command:
-```shell
-sudo apt purge dmz-cursor-theme gnome-accessibility-themes gnome-session-canberra gnome-shell-extension-desktop-icons-ng gnome-shell-extension-ubuntu-dock gstreamer1.0-pulseaudio ibus-gtk libreoffice-ogltrans libreoffice-pdfimport libreoffice-style-breeze libu2f-udev snapd transmission-gtk ubuntu-session xcursor-themes xorg yaru-theme-gnome-shell yaru-theme-gtk yaru-theme-sound
-sudo apt autoremove --purge
-```
+Reopen the terminal in the `installer` folder and rerun the main script. In the menu, select "Purge unused packages". Whether or not the packages from the full package should be purged depends on which version of Ubuntu was installed. If the minimal install was done, then no package from the full package should be purged. If the normal install was done instead, then the packages from the full package should be purged. A list is shown with the suggested packages to be purged. To decide which packages to keep and which to purge, consult the [Details](#Details) section below. The packages to be kept must be uncommented (removing the `#` prefix). Save the file with `Ctrl`+`S` and quit the editor with `Ctrl`+`X` and the commented packages will be purged. When the execution is finished, restart the system to completely unload the removed software.
 
 ### Remove
 Reinstall `ubuntu-desktop-minimal`:
@@ -492,4 +371,4 @@ make ubuntu-system-adjustments
 ```
 
 # Developing
-To customize the metapackages, you can use the `main.sh` script from the `builder/` folder.
+To customize the metapackages, read the [README](builder/README.md) in the `builder/` folder.

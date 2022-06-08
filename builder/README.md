@@ -39,9 +39,9 @@ Download this project's source from the [releases page](https://github.com/natan
 
 In the menus, select "Initialize", and then "Part 1". Whether or not the extra packages should be installed depends on which version of Ubuntu was installed. If the minimal install was done, then no extra packages should be installed. If the normal install was done instead, then the extra packages should be installed. When the execution is finished, log out and back in, but into the GNOME session (Wayland) instead of the Ubuntu one.
 
-Reopen the terminal in the builder folder and rerun the main script. In the menus, select "Initialize", and then "Part 2". When the execution is finished, restart the virtual machine to completely unload the removed software.
+Reopen the terminal in the `builder` folder and rerun the main script. In the menus, select "Initialize", and then "Part 2". When the execution is finished, restart the virtual machine to completely unload the removed software.
 
-Reopen the terminal in the builder folder and rerun the main script. In the menus, select "Execute rounds". When asked, pressing `Enter` will perform the described action. They can be aborted pressing `Ctrl`+`C`. This will iteratively run rounds that will detect the installed packages from the Ubuntu desktop metapackages and choose which ones to remove.
+Reopen the terminal in the `builder` folder and rerun the main script. In the menus, select "Execute rounds". When asked, pressing `Enter` will perform the described action. They can be aborted pressing `Ctrl`+`C`. This will iteratively run rounds that will detect the installed packages from the Ubuntu desktop metapackages and choose which ones to remove.
 
 First, it detects the installed packages. Then, it compares them with the ones from the previous round. If new packages are detected, it shows them to be chosen for removal. The packages are listed one per line, with the recommends starting with a `*`. The packages to be removed must be commented out (prefixing them with `#`, do not remove the `*`). Save the file with `Ctrl`+`S` and quit the editor with `Ctrl`+`X` and the commented packages will be purged, starting a new round.
 

@@ -19,139 +19,18 @@ Substitui os metapacotes desktop originais do Ubuntu 22.04 ([`ubuntu-desktop-min
 
 ## Como usar
 ### Instalar
-Baixe os arquivos `.deb` da [página de lançamentos](https://github.com/natanjunges/custom-desktop/releases) ou [construa-os](#Construindo) você mesmo. Então abra o terminal no caminho onde os arquivos `.deb` estão.
-
-Baixe o pacote `linuxmint-keyring` e adicione as chaves necessárias:
+Baixe o código-fonte deste projeto da [página de lançamentos](https://github.com/natanjunges/custom-desktop/releases). Extraia-o e abra o terminal na pasta `installer`. Baixe os arquivos `.deb` da página de lançamentos e salve-os em `installer/build`. Execute o script principal com:
 ```shell
-wget http://packages.linuxmint.com/pool/main/l/linuxmint-keyring/linuxmint-keyring_2016.05.26_all.deb
-sudo apt install ./linuxmint-keyring_*_all.deb
-sudo apt-key del 451BBBF2
-sudo mv /usr/share/keyrings/linuxmint-keyring.gpg /usr/share/keyrings/linuxmint-keyring
-sudo gpg --dearmor /usr/share/keyrings/linuxmint-keyring
-sudo rm /usr/share/keyrings/linuxmint-keyring
+./main
 ```
 
-Adicione os repositórios main e upstream do Linux Mint Una (eles serão usados para instalar o `firefox`):
-```shell
-sudo tee /etc/apt/sources.list.d/mint-una.list << EOF
-deb [signed-by=/usr/share/keyrings/linuxmint-keyring.gpg] http://packages.linuxmint.com una main
-deb [signed-by=/usr/share/keyrings/linuxmint-keyring.gpg] http://packages.linuxmint.com una upstream
-EOF
-```
+No menu, selecione "Add repositories and install" (Adicionar repositórios e instalar). Se o pacote completo deve ou não ser instalado depende de qual versão do Ubuntu foi instalada. Se a instalação mínima foi feita, então o pacote completo não deve ser instalado. Se, em vez disso, a instalação normal foi feita, então o pacote completo deve ser instalado. Quando a execução terminar, encerre a sessão e entre novamente, mas na sessão GNOME (Wayland) em vez de a sessão Ubuntu.
 
-Fixe os repositórios do Linux Mint para que eles apenas sejam usados para `chromium` e `firefox` (esses pacotes são transicionais para snaps no Ubuntu):
-```shell
-sudo tee /etc/apt/preferences.d/pin-chromium-firefox << EOF
-Package: *
-Pin: release o=linuxmint
-Pin-Priority: -1
-
-Package: chromium
-Pin: release o=linuxmint
-Pin-Priority: 1000
-
-Package: firefox
-Pin: release o=linuxmint
-Pin-Priority: 1000
-
-Package: linuxmint-keyring
-Pin: release o=linuxmint
-Pin-Priority: 1000
-EOF
-```
-
-Atualize os repositórios para que as mudanças surtam efeito:
-```shell
-sudo apt update
-```
-
-Instale o pacote dummy `ubuntu-system-adjustments` e marque-o como automático (ele é uma dependência do `firefox`):
-```shell
-sudo apt install ./ubuntu-system-adjustments_*-dummy_all.deb
-sudo apt-mark auto ubuntu-system-adjustments
-```
-
-Instale `custom-desktop-minimal`:
-```shell
-sudo apt install ./custom-desktop-minimal_*_all.deb gnome-software-plugin-flatpak gnome-software-plugin-snap-
-sudo apt-mark auto gnome-software-plugin-flatpak
-```
-
-Se você quiser apenas os pacotes no conjunto mínimo, instale `custom-desktop` sem as recomendações:
-```shell
-sudo apt install --no-install-recommends ./custom-desktop_*_all.deb
-```
-
-Se, em vez disso, você quiser todos os pacotes, instale `custom-desktop` com as recomendações:
-```shell
-sudo apt install ./custom-desktop_*_all.deb ttf-mscorefonts-installer- unrar- gstreamer1.0-vaapi-
-```
-
-Agora é a hora de remover os metapacotes originais do Ubuntu:
-```shell
-sudo apt purge ubuntu-desktop ubuntu-desktop-minimal
-```
-
-Adicione o repositório Flathub ao flatpak:
-```shell
-sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-```
-
-Encerre a sessão e entre novamente, mas na sessão GNOME (Wayland) em vez de a sessão Ubuntu.
-
-Adicione um perfil customizado user para dconf/gsettings:
-```shell
-sudo tee /etc/dconf/profile/user << EOF
-user-db:user
-system-db:local
-EOF
-sudo mkdir /etc/dconf/db/local.d
-```
-
-Mude os temas de ícones e cursor para Yaru:
-```shell
-sudo tee -a /etc/dconf/db/local.d/01-custom-desktop << EOF
-[org/gnome/desktop/interface]
-icon-theme='Yaru'
-cursor-theme='Yaru'
-EOF
-sudo dconf update
-```
-
-Para cada usuário no sistema, execute:
-```shell
-gsettings reset org.gnome.desktop.interface icon-theme
-gsettings reset org.gnome.desktop.interface cursor-theme
-```
-
-Substitua os favoritos para `snap:firefox` e `snap:snap-store` com os para `firefox` e `gnome-software`, respectivamente:
-```shell
-sudo tee -a /etc/dconf/db/local.d/01-custom-desktop << EOF
-[org/gnome/shell]
-favorite-apps=$(sudo gsettings get org.gnome.shell favorite-apps | sed "s/firefox_firefox/firefox/; s/snap-store_ubuntu-software/org.gnome.Software/")
-EOF
-sudo dconf update
-```
-
-Para cada usuário no sistema, faça o seguinte:
-- Se você quiser preservar as customizações feitas aos favoritos, execute:
-```shell
-gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed "s/firefox_firefox/firefox/; s/snap-store_ubuntu-software/org.gnome.Software/")"
-```
-- Se em vez disso você quiser redefini-los para os valores padrão (ex. em uma nova instalação), execute:
-```shell
-gsettings reset org.gnome.shell favorite-apps
-```
-
-Encerre a sessão e entre novamente na sessão GNOME (Wayland) para aplicar as mudanças.
+Reabra o terminal na pasta `installer` e reexecute o script principal. No menu, selecione "Change icon and cursor theme and favorite apps" (Mudar tema de ícones e cursor e os apps favoritos). Então, para cada usuário no sistema, reabra o terminal na pasta `installer` e reexecute o script principal. No menu, selecione "Apply changes (per user)" (Aplicar mudanças, por usuário). Se o layout de apps favoritos deve ou não ser preservado depende da preferência do usuário. Em uma nova instalação, ele não deve ser preservado. Quando a execução terminar para cada usuário, encerre a sessão e entre novamente na sessão GNOME (Wayland) para aplicar as mudanças.
 
 Se você não está fazendo isto em uma nova instalação, você pode querer substituir os snaps instalados com os seus flatpaks equivalentes: [popey/unsnap](https://github.com/popey/unsnap). **Tenha em mente que esta ferramenta ainda está em estágio "pré-alfa", e pode não funcionar como desejado**. **Você pode [contribuir](https://github.com/popey/unsnap#contributions) testando-a e relatando bugs ou flatpaks faltando**. Apenas os scripts gerados `00-backup` e `03-install-flatpaks` são exigidos que sejam executados, já que o resto já é feito aqui. `snap:firefox` já é substituído pelo pacote deb nativo, então você deve removê-lo do script `03-install-flatpaks` gerado.
 
-Remova os pacotes que permaneram (você também pode querer remover `fonts-opensymbol`, `gnome-disk-utility` e `libwmf0.2-7-gtk` se você apenas quiser os pacotes no conjunto mínimo). Se você quiser remover qualquer um dos [pacotes sugeridos](#Detalhes), adicione-os ao primeiro comando:
-```shell
-sudo apt purge dmz-cursor-theme gnome-accessibility-themes gnome-session-canberra gnome-shell-extension-desktop-icons-ng gnome-shell-extension-ubuntu-dock gstreamer1.0-pulseaudio ibus-gtk libreoffice-ogltrans libreoffice-pdfimport libreoffice-style-breeze libu2f-udev snapd transmission-gtk ubuntu-session xcursor-themes xorg yaru-theme-gnome-shell yaru-theme-gtk yaru-theme-sound
-sudo apt autoremove --purge
-```
+Reabra o terminal na pasta `installer` e reexecute o script principal. No menu, selecione "Purge unused packages" (Purgar pacotes não usados). Se os pacotes do pacote completo devem ou não ser purgados depende de qual versão do Ubuntu foi instalada. Se a instalação mínima foi feita, então os pacotes do pacote completo não devem ser purgados. Se, em vez disso, a instalação normal foi feita, então os pacotes do pacote completo devem ser purgados. Uma lista é exibida com os pacotes sugeridos para ser purgados. Para decidir quais pacotes manter e quais purgar, consulte a seção [Detalhes](#Detalhes) abaixo. Os pacotes para serem mantidos devem ser descomentados (removendo o prefixo `#`). Salve o arquivo com `Ctrl`+`S` e saia do editor com `Ctrl`+`X` e os pacotes comentados serão purgados. Quando a execução terminar, reinicie o sistema para descarregar completamente os softwares removidos.
 
 ### Remover
 Reinstale `ubuntu-desktop-minimal`:
@@ -491,4 +370,4 @@ make ubuntu-system-adjustments
 
 
 # Desenvolvendo
-Para customizar os metapackages, você pode usar o script `main.sh` da pasta `builder/`.
+Para customizar os metapacotes, leia o [README](builder/README.md) na pasta `builder/`.
