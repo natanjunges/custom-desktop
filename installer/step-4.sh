@@ -20,8 +20,8 @@ set -e
 sudo apt purge -y dmz-cursor-theme gnome-accessibility-themes gnome-session-canberra gnome-shell-extension-desktop-icons-ng gnome-shell-extension-ubuntu-dock gstreamer1.0-pulseaudio ibus-gtk libreoffice-ogltrans libreoffice-pdfimport libreoffice-style-breeze libu2f-udev snapd transmission-gtk ubuntu-session xcursor-themes xorg yaru-theme-gnome-shell yaru-theme-gtk yaru-theme-sound
 
 if [ "$1" = --full ]; then
-    grep Suggests: ../custom-desktop | sed "s/Suggests: /#/; s/, /\n#/" > ./build/suggested
+    grep Suggests: ../custom-desktop | sed "s/^Suggests: /#/; s/, /\n#/g" > ./build/suggested
 else
     sudo apt purge -y gnome-disk-utility
-    grep Suggests: ../custom-desktop-minimal | sed "s/Suggests: /#/; s/, /\n#/" > ./build/suggested
+    grep Suggests: ../custom-desktop-minimal | sed "s/^Suggests: /#/; s/, /\n#/g" > ./build/suggested
 fi
