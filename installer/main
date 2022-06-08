@@ -18,63 +18,83 @@
 
 . ../common/dialog.sh
 
+errno=1
+clear
+dialog_title "Minimal package"; dialog_yesno "Installing minimal package?"
+minimal=$?
 clear
 op=$(dialog_title Operation; dialog_menu "Choose the desired operation:" 1 "Add repositories and install" 2 "Change icon and cursor theme and favorite apps" 3 "Apply changes (per user)" 4 "Purge unused packages")
 err=$?
 clear
 
 if [ $err != 0 ]; then
-    exit 1
+    exit $errno
 fi
+
+errno=$((errno + 1))
 
 case $op in
     1)
-        dialog_title "Add repositories and install - Full package"; dialog_yesno "Install full package?"
-        err=$?
-        clear
         dialog_title "Adding repositories and installing..."
 
-        if [ $err = 0 ]; then
-            ./step-1.sh --full || exit 2
+        if [ $minimal = 0 ]; then
+            ./step-1.sh || exit $errno
         else
-            ./step-1.sh || exit 3
+            errno=$((errno + 1))
+            ./step-1.sh --full || exit $errno
         fi
 
         echo Logout and login into the GNOME session
     ;;
     2)
+        errno=$((errno + 2))
         dialog_title "Changing icon and cursor theme and favorite apps..."
-        ./step-2.sh || exit 4
+        ./step-2.sh || exit $errno
     ;;
     3)
+        errno=$((errno + 3))
         dialog_title "Apply changes - Preserve favorite apps"; dialog_yesno "Preserve favorite apps layout?"
         err=$?
         clear
         dialog_title "Applying changes..."
 
         if [ $err = 0 ]; then
-            ./step-3.sh --preserve || exit 5
+            if [ $minimal = 0 ]; then
+                ./step-3.sh --preserve || exit $errno
+            else
+                errno=$((errno + 1))
+                ./step-3.sh --full --preserve || exit $errno
+            fi
         else
-            ./step-3.sh || exit 6
+            errno=$((errno + 2))
+
+            if [ $minimal = 0 ]; then
+                ./step-3.sh || exit $errno
+            else
+                errno=$((errno + 1))
+                ./step-3.sh --full || exit $errno
+            fi
         fi
     ;;
     4)
-        dialog_title "Purge unused packages - Full package"; dialog_yesno "Purge from full package?"
-        err=$?
-        clear
+        errno=$((errno + 7))
         dialog_title "Purging packages..."
 
-        if [ $err = 0 ]; then
-            ./step-4.sh --full || exit 7
+        if [ $minimal = 0 ]; then
+            ./step-4.sh || exit $errno
+            errno=$((errno + 2))
         else
-            ./step-4.sh || exit 8
+            errno=$((errno + 1))
+            ./step-4.sh --full || exit $errno
+            errno=$((errno + 1))
         fi
 
         clear
-        nano ./build/suggested || exit 9
+        nano ./build/suggested || exit $errno
+        errno=$((errno + 1))
         dialog_title "Purging unused suggested packages..."
-        wait_prompt
-        ../common/purge.sh < ./build/suggested || exit 10
+        wait_confirm
+        ../common/purge.sh < ./build/suggested || exit $errno
         echo Restart your machine
     ;;
 esac

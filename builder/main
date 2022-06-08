@@ -18,14 +18,20 @@
 
 . ../common/dialog.sh
 
+errno=1
+clear
+dialog_title "Minimal package"; dialog_yesno "Building minimal package?"
+minimal=$?
 clear
 op=$(dialog_title Operation; dialog_menu "Choose the desired operation:" 1 Initialize 2 "Execute rounds" 3 "Generate metapackage control file")
 err=$?
 clear
 
 if [ $err != 0 ]; then
-    exit 1
+    exit $errno
 fi
+
+errno=$((errno + 1))
 
 case $op in
     1)
@@ -34,28 +40,30 @@ case $op in
         clear
 
         if [ $err != 0 ]; then
-            exit 2
+            exit $errno
         fi
+
+        errno=$((errno + 1))
 
         case $part in
             1)
-                dialog_title "Initialize - Part 1 - Extra packages"; dialog_yesno "Install extra packages?"
-                err=$?
-                clear
                 dialog_title "Running initialization part 1..."
 
-                if [ $err = 0 ]; then
-                    ./init-1.sh --full || exit 3
+                if [ $minimal = 0 ]; then
+                    ./init-1.sh || exit $errno
                 else
-                    ./init-1.sh || exit 4
+                    errno=$((errno + 1))
+                    ./init-1.sh --full || exit $errno
                 fi
 
                 echo Logout and login into the GNOME session
             ;;
-            2) dialog_title "Running initialization part 2..."; ./init-2.sh && echo Restart your machine || exit 5;;
+            2) errno=$((errno + 2)); dialog_title "Running initialization part 2..."; ./init-2.sh && echo Restart your machine || exit $errno;;
         esac
     ;;
     2)
+        errno=$((errno + 4))
+
         while :; do
             round=$(($(ls -1 -t ./build/round-*-step-*-full 2> /dev/null | head -n 1 | sed "s|^./build/round-||; s/-step-[1-4]-full\$//" || echo 0) + 1))
             step=0
@@ -68,12 +76,15 @@ case $op in
                 step=$((step + 1))
                 clear
                 dialog_title "Running round $round step $step..."
-                wait_prompt
+                wait_confirm
 
                 if [ $step -gt 2 ]; then
-                    grep "^[^#]" ./build/round-*-step-2-diff | tr -d "*" | sed ":a; $!N; s/\n/ /; ta" | ./step-$step.sh > ./build/round-$round-step-$step-full || exit 6
+                    grep "^[^#]" ./build/round-*-step-2-diff | tr -d "*" | sed ":a; $!N; s/\n/ /; ta" | ./step-$step.sh > ./build/round-$round-step-$step-full || exit $errno
+                    errno=$((errno + 2))
                 else
-                    ./step-$step.sh > ./build/round-$round-step-$step-full || exit 7
+                    errno=$((errno + 1))
+                    ./step-$step.sh > ./build/round-$round-step-$step-full || exit $errno
+                    errno=$((errno + 1))
                 fi
 
                 clear
@@ -82,10 +93,12 @@ case $op in
                 if [ $last_round = $round ] || diff ./build/round-$last_round-step-$step-full ./build/round-$round-step-$step-full | grep -q "^> "; then
                     if [ $step = 4 ]; then
                         dialog_title "Running round $round step 5..."
-                        wait_prompt
-                        grep "^[^#]" ./build/round-*-step-2-diff | tr -d "*" | sed ":a; $!N; s/\n/ /; ta" | ./step-5.sh > ./build/round-$round-step-5-diff || exit 8
+                        wait_confirm
+                        grep "^[^#]" ./build/round-*-step-2-diff | tr -d "*" | sed ":a; $!N; s/\n/ /; ta" | ./step-5.sh > ./build/round-$round-step-5-diff || exit $errno
                         clear
                     fi
+
+                    errno=$((errno + 1))
 
                     if [ $last_round = $round ]; then
                         cp ./build/round-$round-step-$step-full ./build/round-$round-step-$step-diff
@@ -93,15 +106,19 @@ case $op in
                         diff ./build/round-$last_round-step-$step-full ./build/round-$round-step-$step-full | grep "^> " | sed "s/^> //" > ./build/round-$round-step-$step-diff
                     fi
 
-                    nano ./build/round-$round-step-$step-diff || exit 9
+                    nano ./build/round-$round-step-$step-diff || exit $errno
+                    errno=$((errno + 1))
                     dialog_title "Purging packages from round $round step $step..."
-                    wait_prompt
-                    ../common/purge.sh < ./build/round-$round-step-$step-diff || exit 10
+                    wait_confirm
+                    ../common/purge.sh < ./build/round-$round-step-$step-diff || exit $errno
+                    errno=$((errno - 4))
                     break
                 else
+                    errno=$((errno + 3))
                     dialog_title "Removing ./build/round-$round-step-$step-full..."
-                    wait_prompt
-                    rm ./build/round-$round-step-$step-full || exit 11
+                    wait_confirm
+                    rm ./build/round-$round-step-$step-full || exit $errno
+                    errno=$((errno - 5))
 
                     if [ $step = 4 ]; then
                         break 2
@@ -111,15 +128,14 @@ case $op in
         done
     ;;
     3)
-        dialog_title "Generate - Full package"; dialog_yesno "Build full package?"
-        err=$?
-        clear
+        errno=$((errno + 10))
         dialog_title "Generating control file..."
 
-        if [ $err = 0 ]; then
-            ./finish.sh --full || exit 12
+        if [ $minimal = 0 ]; then
+            ./finish.sh || exit $errno
         else
-            ./finish.sh || exit 13
+            errno=$((errno + 1))
+            ./finish.sh --full || exit $errno
         fi
     ;;
 esac

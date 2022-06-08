@@ -20,7 +20,11 @@ set -e
 gsettings reset org.gnome.desktop.interface icon-theme
 gsettings reset org.gnome.desktop.interface cursor-theme
 
-if [ "$1" = --preserve ]; then
+if [ "$1" = --full ]; then
+    xdg-mime default shotwell-viewer.desktop $(grep ^MimeType= /usr/share/applications/shotwell-viewer.desktop | sed "s/^MimeType=//; s/;/ /g")
+fi
+
+if [ "$1" = --preserve -o "$2" = --preserve ]; then
     gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed "s/firefox_firefox/firefox/; s/snap-store_ubuntu-software/org.gnome.Software/")"
 else
     gsettings reset org.gnome.shell favorite-apps

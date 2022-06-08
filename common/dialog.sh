@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Custom Desktop.  If not, see <https://www.gnu.org/licenses/>.
 
-wait_prompt() {
+wait_confirm() {
     read -p "Press Enter to continue or Ctrl+C to abort..." e
 }
 
