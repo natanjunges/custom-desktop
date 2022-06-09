@@ -38,7 +38,9 @@ Download this project's source from the [releases page](https://github.com/natan
 ./main
 ```
 
-In the menus, select "Initialize", and then "Part 1". Whether or not the extra packages should be installed depends on which version of Ubuntu was installed. If the minimal install was done, then no extra packages should be installed. If the normal install was done instead, then the extra packages should be installed. When the execution is finished, log out and back in, but into the GNOME session (Wayland) instead of the Ubuntu one.
+Which edition should be built depends on which version of Ubuntu was installed. If the minimal Ubuntu install was done, then the minimal edition should be built. If the normal Ubuntu install was done instead, then the full edition should be built. For each execution of the script, select the same option.
+
+In the menus, select "Initialize", and then "Part 1". When the execution is finished, log out and back in, but into the GNOME session (Wayland) instead of the Ubuntu one.
 
 Reopen the terminal in the `builder` folder and rerun the main script. In the menus, select "Initialize", and then "Part 2". When the execution is finished, restart the virtual machine to completely unload the removed software.
 
@@ -53,4 +55,4 @@ Each of those rounds consists of up to five steps:
 - In the fourth step, only the packages with pre-depends or depends reverse dependencies that are not from the metapackages will be listed;
 - In the fifth step, only the packages with pre-depends or depends reverse dependencies that are from the metapackages will be listed, and they cannot be removed;
 
-Once the rounds are finished, rerun the main script. In the menu, select "Generate metapackage control file". Whether or not the full package should be built depends on the same criteria of "Initialize - Part 1". The removed packages are shown to be added to the suggests, with the packages not to be added to the suggests being commented out. A control file named `build/control` will be generated, that can be used to replace `custom-desktop` or `custom-desktop-minimal` in the parent folder. Editing the control file is highly encouraged, mainly the `Homepage`, `Bugs`, `Package`, `Version`, `Maintainer` and `Description` sections.
+Once the rounds are finished, rerun the main script. In the menu, select "Generate metapackage control file". The removed packages are shown to be added to the suggests, with the packages not to be added to the suggests being commented out. A control file named `build/control` will be generated, that can be used to replace `custom-desktop` or `custom-desktop-minimal` in the parent folder. Editing the control file is highly encouraged, mainly the `Homepage`, `Bugs`, `Package`, `Version`, `Maintainer` and `Description` sections.

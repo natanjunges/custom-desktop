@@ -21,6 +21,7 @@ gsettings reset org.gnome.desktop.interface icon-theme
 gsettings reset org.gnome.desktop.interface cursor-theme
 
 if [ "$1" = --full ]; then
+    xdg-mime default rhythmbox.desktop $(grep ^MimeType= /usr/share/applications/rhythmbox.desktop | sed "s/^MimeType=//; s/;/ /g")
     xdg-mime default shotwell-viewer.desktop $(grep ^MimeType= /usr/share/applications/shotwell-viewer.desktop | sed "s/^MimeType=//; s/;/ /g")
 fi
 

@@ -20,18 +20,24 @@
 
 errno=1
 clear
-dialog_title "Minimal package"; dialog_yesno "Installing minimal package?"
-minimal=$?
-clear
-op=$(dialog_title Operation; dialog_menu "Choose the desired operation:" 1 "Add repositories and install" 2 "Change icon and cursor theme and favorite apps" 3 "Apply changes (per user)" 4 "Purge unused packages")
+minimal=$(dialog_title Edition; dialog_menu "Which edition is being installed?" 0 Minimal 1 Full)
 err=$?
-clear
 
 if [ $err != 0 ]; then
     exit $errno
 fi
 
 errno=$((errno + 1))
+clear
+op=$(dialog_title Operation; dialog_menu "Choose the desired operation:" 1 "Add repositories and install" 2 "Change icon and cursor theme and favorite apps" 3 "Apply changes (per user)" 4 "Purge unused packages")
+err=$?
+
+if [ $err != 0 ]; then
+    exit $errno
+fi
+
+errno=$((errno + 1))
+clear
 
 case $op in
     1)
@@ -90,8 +96,7 @@ case $op in
         fi
 
         clear
-        nano ./build/suggested || exit $errno
-        errno=$((errno + 1))
+        nano ./build/suggested
         dialog_title "Purging unused suggested packages..."
         wait_confirm
         ../common/purge.sh < ./build/suggested || exit $errno

@@ -20,30 +20,36 @@
 
 errno=1
 clear
-dialog_title "Minimal package"; dialog_yesno "Building minimal package?"
-minimal=$?
-clear
-op=$(dialog_title Operation; dialog_menu "Choose the desired operation:" 1 Initialize 2 "Execute rounds" 3 "Generate metapackage control file")
+minimal=$(dialog_title Edition; dialog_menu "Which edition is being built?" 0 Minimal 1 Full)
 err=$?
-clear
 
 if [ $err != 0 ]; then
     exit $errno
 fi
 
 errno=$((errno + 1))
+clear
+op=$(dialog_title Operation; dialog_menu "Choose the desired operation:" 1 Initialize 2 "Execute rounds" 3 "Generate metapackage control file")
+err=$?
+
+if [ $err != 0 ]; then
+    exit $errno
+fi
+
+errno=$((errno + 1))
+clear
 
 case $op in
     1)
         part=$(dialog_title "Initialize - Part"; dialog_menu "Choose the desired part:" 1 "Part 1" 2 "Part 2")
         err=$?
-        clear
 
         if [ $err != 0 ]; then
             exit $errno
         fi
 
         errno=$((errno + 1))
+        clear
 
         case $part in
             1)
@@ -106,19 +112,18 @@ case $op in
                         diff ./build/round-$last_round-step-$step-full ./build/round-$round-step-$step-full | grep "^> " | sed "s/^> //" > ./build/round-$round-step-$step-diff
                     fi
 
-                    nano ./build/round-$round-step-$step-diff || exit $errno
-                    errno=$((errno + 1))
+                    nano ./build/round-$round-step-$step-diff
                     dialog_title "Purging packages from round $round step $step..."
                     wait_confirm
                     ../common/purge.sh < ./build/round-$round-step-$step-diff || exit $errno
-                    errno=$((errno - 4))
+                    errno=$((errno - 3))
                     break
                 else
-                    errno=$((errno + 3))
+                    errno=$((errno + 2))
                     dialog_title "Removing ./build/round-$round-step-$step-full..."
                     wait_confirm
                     rm ./build/round-$round-step-$step-full || exit $errno
-                    errno=$((errno - 5))
+                    errno=$((errno - 4))
 
                     if [ $step = 4 ]; then
                         break 2
@@ -128,7 +133,7 @@ case $op in
         done
     ;;
     3)
-        errno=$((errno + 10))
+        errno=$((errno + 9))
         dialog_title "Generating control file..."
 
         if [ $minimal = 0 ]; then

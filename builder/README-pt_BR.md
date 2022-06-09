@@ -37,7 +37,9 @@ Baixe o código-fonte deste projeto da [página de lançamentos](https://github.
 ./main
 ```
 
-Nos menus, selecione "Initialize" (Inicializar), e então "Part 1" (Parte 1). Se os pacotes extras devem ou não ser instalados depende de qual versão do Ubuntu foi instalada. Se a instalação mínima foi feita, então nenhum pacote extra deve ser instalado. Se, em vez disso, a instalação normal foi feita, então os pacotes extras devem ser instalados. Quando a execução terminar, encerre a sessão e entre novamente, mas na sessão GNOME (Wayland) em vez de a sessão Ubuntu.
+Qual edição deve ser construída depende de qual versão do Ubuntu foi instalada. Se a instalação mínima do Ubuntu foi feita, então a edição mínima deve ser construída. Se, em vez disso, a instalação normal do Ubuntu foi feita, então a edição completa deve ser construída. Para cada execução do script, selecione a mesma opção.
+
+Nos menus, selecione "Initialize" (Inicializar), e então "Part 1" (Parte 1). Quando a execução terminar, encerre a sessão e entre novamente, mas na sessão GNOME (Wayland) em vez de a sessão Ubuntu.
 
 Reabra o terminal na pasta `builder` e reexecute o script principal. Nos menus, selecione "Initialize" (Inicializar), e então "Part 2" (Parte 2). Quando a execução terminar, reinicie o sistema para descarregar completamente os softwares removidos.
 
@@ -52,4 +54,4 @@ Cada uma dessas rodadas consiste de até cinco passos:
 - No quarto passo, apenas os pacotes com dependências reversas pre-depends ou depends que não sejam dos metapacotes serão listados;
 - No quinto passo, apenas os pacotes com dependências reversas pre-depends ou depends que sejam dos metapacotes serão listados, e eles não podem ser removidos;
 
-Uma vez que as rodadas terminem, reexecute o script principal. No menu, selecione "Generate metapackage control file" (Gerar arquivo de controle do metapacote). Se o pacote completo deve ou não ser construído depende dos mesmos critérios de "Initialize - Part 1". Os pacotes removidos são exibidos para serem adicionados aos suggests, com os pacotes a não ser adicionados aos suggests sendo comentados. Um arquivo de controle nomeado `build/control` será gerado, que pode ser usado para substituir `custom-desktop` ou `custom-desktop-minimal` na pasta mãe. Editar o arquivo de controle é altamente encorajado, principalmente as seções `Homepage`, `Bugs`, `Package`, `Version`, `Maintainer` e `Description`.
+Uma vez que as rodadas terminem, reexecute o script principal. No menu, selecione "Generate metapackage control file" (Gerar arquivo de controle do metapacote). Os pacotes removidos são exibidos para serem adicionados aos suggests, com os pacotes a não ser adicionados aos suggests sendo comentados. Um arquivo de controle nomeado `build/control` será gerado, que pode ser usado para substituir `custom-desktop` ou `custom-desktop-minimal` na pasta mãe. Editar o arquivo de controle é altamente encorajado, principalmente as seções `Homepage`, `Bugs`, `Package`, `Version`, `Maintainer` e `Description`.
