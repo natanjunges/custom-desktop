@@ -19,7 +19,7 @@ Substitui os metapacotes desktop originais do Ubuntu 22.04 ([`ubuntu-desktop-min
 
 ## Como usar
 ### Instalar
-Baixe o código-fonte deste projeto da [página de lançamentos](https://github.com/natanjunges/custom-desktop/releases). Extraia-o e abra o terminal na pasta `installer`. Baixe os arquivos `.deb` da página de lançamentos e salve-os em `installer/build`. Execute o script principal com:
+Baixe o código-fonte deste projeto da [página de lançamentos](https://github.com/natanjunges/custom-desktop/releases). Extraia-o e abra o terminal na pasta `installer/`. Baixe os arquivos `.deb` da página de lançamentos e salve-os em `installer/build/`. Execute o script principal com:
 ```shell
 ./main
 ```
@@ -28,11 +28,11 @@ Qual edição deve ser instalada depende de qual versão do Ubuntu foi instalada
 
 No menu, selecione "Add repositories and install" (Adicionar repositórios e instalar). Quando a execução terminar, encerre a sessão e entre novamente, mas na sessão GNOME (Wayland) em vez de a sessão Ubuntu.
 
-Reabra o terminal na pasta `installer` e reexecute o script principal. No menu, selecione "Change icon and cursor theme and favorite apps" (Mudar tema de ícones e cursor e os apps favoritos). Então, para cada usuário no sistema, reabra o terminal na pasta `installer` e reexecute o script principal. No menu, selecione "Apply changes (per user)" (Aplicar mudanças, por usuário). Se o layout de apps favoritos deve ou não ser preservado depende da preferência do usuário. Em uma nova instalação, ele não deve ser preservado. Quando a execução terminar para cada usuário, encerre a sessão e entre novamente na sessão GNOME (Wayland) para aplicar as mudanças.
+Reabra o terminal na pasta `installer/` e reexecute o script principal. No menu, selecione "Change icon and cursor theme and favorite apps" (Mudar tema de ícones e cursor e os apps favoritos). Então, para cada usuário no sistema, reabra o terminal na pasta `installer/` e reexecute o script principal. No menu, selecione "Apply changes (per user)" (Aplicar mudanças, por usuário). Se o layout de apps favoritos deve ou não ser preservado depende da preferência do usuário. Em uma nova instalação, ele não deve ser preservado. Quando a execução terminar para cada usuário, encerre a sessão e entre novamente na sessão GNOME (Wayland) para aplicar as mudanças.
 
-Se você não está fazendo isto em uma nova instalação, você pode querer substituir os snaps instalados com os seus flatpaks equivalentes: [popey/unsnap](https://github.com/popey/unsnap). **Tenha em mente que esta ferramenta ainda está em estágio "pré-alfa", e pode não funcionar como desejado**. **Você pode [contribuir](https://github.com/popey/unsnap#contributions) testando-a e relatando bugs ou flatpaks faltando**. Apenas os scripts gerados `00-backup` e `03-install-flatpaks` são exigidos que sejam executados, já que o resto já é feito aqui. `snap:firefox` já é substituído pelo pacote deb nativo, então você deve removê-lo do script `03-install-flatpaks` gerado.
+Se você não está fazendo isto em uma nova instalação, você pode querer substituir os snaps instalados com os seus flatpaks equivalentes: [popey/unsnap](https://github.com/popey/unsnap). **Tenha em mente que esta ferramenta ainda está em estágio "pré-alfa", e pode não funcionar como desejado**. **Você pode [contribuir](https://github.com/popey/unsnap#contributions) testando-a e relatando bugs ou flatpaks faltando**. Apenas os scripts gerados `00-backup` e `03-install-flatpaks` são exigidos que sejam executados, já que o resto já é feito aqui. [`snap:firefox`](https://snapcraft.io/firefox) já é substituído pelo pacote deb nativo, então você deve removê-lo do script `03-install-flatpaks` gerado.
 
-Reabra o terminal na pasta `installer` e reexecute o script principal. No menu, selecione "Purge unused packages" (Purgar pacotes não usados). Depois de alguma execução, uma lista é exibida com os pacotes sugeridos para ser purgados. Para decidir quais pacotes manter e quais purgar, consulte a seção [Detalhes](#Detalhes) abaixo. Os pacotes para serem mantidos devem ser descomentados (removendo o prefixo `#`). Salve o arquivo com `Ctrl`+`S` e saia do editor com `Ctrl`+`X` e os pacotes comentados serão purgados. Quando a execução terminar, reinicie o sistema para descarregar completamente os softwares removidos.
+Reabra o terminal na pasta `installer/` e reexecute o script principal. No menu, selecione "Purge unused packages" (Purgar pacotes não usados). Depois de alguma execução, uma lista é exibida com os pacotes sugeridos para ser purgados. Para decidir quais pacotes manter e quais purgar, consulte a seção [Detalhes](#Detalhes) abaixo. Os pacotes para serem mantidos devem ser descomentados (removendo o prefixo `#`). Salve o arquivo com `Ctrl`+`S` e saia do editor com `Ctrl`+`X` e os pacotes comentados serão purgados. Quando a execução terminar, reinicie o sistema para descarregar completamente os softwares removidos.
 
 ### Remover
 Reinstale `ubuntu-desktop-minimal`:
@@ -58,7 +58,7 @@ sudo apt purge custom-desktop custom-desktop-minimal
 Remova o perfil customizado de dconf/gsettings:
 ```shell
 sudo rm /etc/dconf/db/local.d/01-custom-desktop
-sudo rm -r /etc/dconf/db/local.d
+sudo rm -r /etc/dconf/db/local.d/
 sudo rm /etc/dconf/profile/user
 sudo dconf update
 ```
@@ -71,7 +71,7 @@ gsettings reset org.gnome.desktop.interface icon-theme
 gsettings reset org.gnome.desktop.interface cursor-theme
 ```
 
-Reinstale `snap:snap-store` e `snap:firefox`:
+Reinstale [`snap:snap-store`](https://snapcraft.io/snap-store) e `snap:firefox`:
 ```shell
 sudo snap install snap-store firefox
 ```
@@ -112,7 +112,7 @@ sudo apt update
 - [Caffeine](https://extensions.gnome.org/extension/517/caffeine/): Desabilita a proteção de tela e suspensão automática;
 - [~~Dash to Dock~~](https://extensions.gnome.org/extension/307/dash-to-dock/): Esta extensão move o dash para fora da visão geral transformando-o em uma dock para um lançamento mais fácil de aplicações e uma troca mais rápida entre janelas e desktops (**atualmente não suportada no GNOME 42, enquanto isso [Dash to Dock for COSMIC](https://extensions.gnome.org/extension/5004/dash-to-dock-for-cosmic/) pode ser usada**);
 - [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/): GSConnect é uma implementação completa do KDE Connect especialmente para o GNOME Shell com integração para Nautilus, Chrome e Firefox;
-    - Para integrar com o Nautilus, você precisa instalar `python3-nautilus` e `gir1.2-nautilus-3.0`:
+    - Para integrar com o Nautilus, você precisa instalar [`python3-nautilus`](https://packages.ubuntu.com/jammy/python3-nautilus) e [`gir1.2-nautilus-3.0`](https://packages.ubuntu.com/jammy/gir1.2-nautilus-3.0):
 ```shell
 sudo apt install python3-nautilus gir1.2-nautilus-3.0
 ```
@@ -126,7 +126,7 @@ Awesome Tiles e Tiling Assistant fazem coisas similares, e podem não funcionar 
 ## Extensões Firefox sugeridas
 - [Bitwarden - Free Password Manager](https://addons.mozilla.org/firefox/addon/bitwarden-password-manager/): Um gerenciador de senhas seguro e gratuito para todos os seus dispositivos;
 - [GNOME Shell integration](https://addons.mozilla.org/firefox/addon/gnome-shell-integration/): Esta extensão provê integração com o GNOME Shell e o repositório de extensões correspondente;
-    - Primeiro você precisa instalar `chrome-gnome-shell`:
+    - Primeiro você precisa instalar [`chrome-gnome-shell`](https://packages.ubuntu.com/jammy/chrome-gnome-shell):
 ```shell
 sudo apt install chrome-gnome-shell
 ```
@@ -265,7 +265,7 @@ Há grupos de pacotes que originalmente pertenciam ao metapacote `ubuntu-desktop
 | | [cups-bsd](https://packages.ubuntu.com/jammy/cups-bsd) | Common UNIX Printing System UNIX (tm) - comandos BSD. |
 | | [cups-client](https://packages.ubuntu.com/jammy/cups-client) | Common UNIX Printing System(tm) - programas clientes (SysV). |
 | | [cups-filters](https://packages.ubuntu.com/jammy/cups-filters) | Filtros CUPS OpenPrinting - Pacote principal. |
-| Bluetooth | [bluez-cups](https://packages.ubuntu.com/jammy/bluez-cups) | Driver de impressora bluetooth para CUPS. |
+| Bluetooth | bluez-cups | Driver de impressora bluetooth para CUPS. |
 | Brother/Lenovo | [printer-driver-brlaser](https://packages.ubuntu.com/jammy/printer-driver-brlaser) | Driver de impressora para (algumas) impressoras laser Brother. |
 | Brother | [printer-driver-ptouch](https://packages.ubuntu.com/jammy/printer-driver-ptouch) | Driver de impressão para impressoras de etiqueta Brother P-touch. |
 | Foomatic | [foomatic-db-compressed-ppds](https://packages.ubuntu.com/jammy/foomatic-db-compressed-ppds) | Suporte a impressoras OpenPrinting - PPDs comprimidos derivados da base de dados. |
@@ -298,7 +298,7 @@ Há grupos de pacotes que originalmente pertenciam ao metapacote `ubuntu-desktop
 
 | ubuntu-desktop-minimal | Descrição |
 |------------------------|-----------|
-| [rfkill](https://packages.ubuntu.com/jammy/rfkill) | Ferramenta para habilitar e desabilitar dispositivos sem fio. **Este pacote também é usado por dispositivos Bluetooth**. **Ele deveria ser removido apenas se tanto Bluetooth quanto Wi-Fi não forem usados**. |
+| rfkill | Ferramenta para habilitar e desabilitar dispositivos sem fio. **Este pacote também é usado por dispositivos Bluetooth**. **Ele deveria ser removido apenas se tanto Bluetooth quanto Wi-Fi não forem usados**. |
 | [wireless-tools](https://packages.ubuntu.com/jammy/wireless-tools) | Ferramentas p/ manipular as Extensões Sem-fio do Linux (Linux Wireless Extensions). |
 | [wpasupplicant](https://packages.ubuntu.com/jammy/wpasupplicant) | Suporte ao cliente para WPA e WPA2 (IEEE 802.11i). |
 
@@ -309,12 +309,12 @@ Estes são os pacotes que são adicionados ao, removidos do ou substituídos no 
 
 | ubuntu-desktop | custom-desktop | Descrição |
 |----------------|----------------|-----------|
-| [fonts-opensymbol](https://packages.ubuntu.com/jammy/fonts-opensymbol) | fonts-opensymbol | Fonte OpenSymbol TrueType. **Movido do `custom-desktop-minimal`, já que é usado pelo LibreOffice**. |
-| [gnome-disk-utility](https://packages.ubuntu.com/jammy/gnome-disk-utility) | gnome-disk-utility | Gerencia e configura mídia e drives de disco. **Movido do `custom-desktop-minimal`, já que não é considerado mínimo**. |
+| fonts-opensymbol | fonts-opensymbol | Fonte OpenSymbol TrueType. **Movido do `custom-desktop-minimal`, já que é usado pelo LibreOffice**. |
+| gnome-disk-utility | gnome-disk-utility | Gerencia e configura mídia e drives de disco. **Movido do `custom-desktop-minimal`, já que não é considerado mínimo**. |
 | [~~libreoffice-ogltrans~~](https://packages.ubuntu.com/jammy/libreoffice-ogltrans) | | Pacote transicional para libreoffice-ogltrans. **Pacotes transicionais não são necessários**. |
 | [~~libreoffice-pdfimport~~](https://packages.ubuntu.com/jammy/libreoffice-pdfimport) | | Pacote transicional para o componente de Importar PDF para LibreOffice. **Pacotes transicionais não são necessários**. |
 | [~~libreoffice-style-breeze~~](https://packages.ubuntu.com/jammy/libreoffice-style-breeze) | | Suíte de produtividade Office -- Estilo de símbolos Breeze. **KDE não é suportado, então não é usado pela maioria das pessoas**. |
-| [libwmf0.2-7-gtk](https://packages.ubuntu.com/jammy/libwmf0.2-7-gtk) | libwmf0.2-7-gtk | Biblioteca  de conversão de Windows metafile. **Movido do `custom-desktop-minimal`, já que é usado pelo LibreOffice**. |
+| libwmf0.2-7-gtk | libwmf0.2-7-gtk | Biblioteca  de conversão de Windows metafile. **Movido do `custom-desktop-minimal`, já que é usado pelo LibreOffice**. |
 | [~~transmission-gtk~~](https://packages.ubuntu.com/jammy/transmission-gtk) | [qbittorrent](https://packages.ubuntu.com/jammy/qbittorrent) | Cliente bittorrent baseado na libtorrent-rasterbar com uma GUI Qt5. **Transmission não é suportado, já que é bugado e falta várias funcionalidades**. **qBittorrent é usado em vez disso, já que é um dos melhores clientes torrent já feitos**. |
 | | [ubuntu-restricted-extras](https://packages.ubuntu.com/jammy/ubuntu-restricted-extras) | Codecs de mídia e fontes comumente usados para o Ubuntu. **Adiciona codecs proprietários para que o Totem e o Rhythmbox possam reproduzir a maioria dos formatos**. **As fontes extras e o unrar não são instalados**. |
 
@@ -334,7 +334,7 @@ Há grupos de pacotes que originalmente pertenciam ao metapacote `ubuntu-desktop
 | ubuntu-desktop | Descrição |
 |----------------|-----------|
 | [cheese](https://packages.ubuntu.com/jammy/cheese) | Ferramenta para capturar fotos e vídeos a partir da webcam. |
-| [eog](https://packages.ubuntu.com/jammy/eog) | Programa visualizador de gráficos "Eye of GNOME". **Removido já que shotwell faz o que ele faz e mais**. |
+| [eog](https://packages.ubuntu.com/jammy/eog) | Programa visualizador de gráficos "Eye of GNOME". **Removido já que o Shotwell faz o que ele faz e mais**. |
 | [simple-scan](https://packages.ubuntu.com/jammy/simple-scan) | Utilitário Simples de Escaneamento (Scanning). |
 
 #### Email

@@ -23,7 +23,7 @@ user-db:user
 system-db:local
 EOF
 
-sudo mkdir /etc/dconf/db/local.d
+sudo mkdir /etc/dconf/db/local.d/
 
 sudo tee /etc/dconf/db/local.d/01-custom-desktop << EOF
 [org/gnome/desktop/interface]

@@ -32,7 +32,7 @@ sudo apt autoremove --purge
 
 Note que snaps não são atualizados, já que eles serão em breve removidos. Reinicie a máquina virtual para carregar os softwares mais atualizados (principalmente o kernel).
 
-Baixe o código-fonte deste projeto da [página de lançamentos](https://github.com/natanjunges/custom-desktop/releases). Extraia-o e abra o terminal na pasta `builder`. Baixe `ubuntu-system-adjustments` da página de lançamentos e salve-o em `builder/build`. Execute o script principal com:
+Baixe o código-fonte deste projeto da [página de lançamentos](https://github.com/natanjunges/custom-desktop/releases). Extraia-o e abra o terminal na pasta `builder/`. Baixe `ubuntu-system-adjustments` da página de lançamentos e salve-o em `builder/build/`. Execute o script principal com:
 ```shell
 ./main
 ```
@@ -41,9 +41,9 @@ Qual edição deve ser construída depende de qual versão do Ubuntu foi instala
 
 Nos menus, selecione "Initialize" (Inicializar), e então "Part 1" (Parte 1). Quando a execução terminar, encerre a sessão e entre novamente, mas na sessão GNOME (Wayland) em vez de a sessão Ubuntu.
 
-Reabra o terminal na pasta `builder` e reexecute o script principal. Nos menus, selecione "Initialize" (Inicializar), e então "Part 2" (Parte 2). Quando a execução terminar, reinicie o sistema para descarregar completamente os softwares removidos.
+Reabra o terminal na pasta `builder/` e reexecute o script principal. Nos menus, selecione "Initialize" (Inicializar), e então "Part 2" (Parte 2). Quando a execução terminar, reinicie o sistema para descarregar completamente os softwares removidos.
 
-Reabra o terminal na pasta `builder` e reexecute o script principal. No menu, selecione "Execute rounds" (Executar rodadas). Quando perguntado, pressionar `Enter` irá executar a ação descrita. Elas podem ser abortadas pressionando `Ctrl`+`C`. Isto irá executar iterativamente rodadas que irão detectar os pacotes instalados dos metapacotes desktop do Ubuntu e escolher quais remover.
+Reabra o terminal na pasta `builder/` e reexecute o script principal. No menu, selecione "Execute rounds" (Executar rodadas). Quando perguntado, pressionar `Enter` irá executar a ação descrita. Elas podem ser abortadas pressionando `Ctrl`+`C`. Isto irá executar iterativamente rodadas que irão detectar os pacotes instalados dos metapacotes desktop do Ubuntu e escolher quais remover.
 
 Primeiro, ele detecta os pacotes instalados. Então, ele os compara com os da rodada anterior. Se novos pacotes são detectados, ele os exibe para serem escolhidos para remoção. Os pacotes são listados um por linha, com os recommends começando com um `*`. Os pacotes a serem removidos devem ser comentados (prefixando-os com `#`, não remova o `*`). Salve o arquivo com `Ctrl`+`S` e saia do editor com `Ctrl`+`X` e os pacotes comentados serão purgados, iniciando uma nova rodada.
 

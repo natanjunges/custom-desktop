@@ -21,7 +21,7 @@ It replaces the Ubuntu 22.04 original desktop metapackages ([`ubuntu-desktop-min
 
 ## How to use
 ### Install
-Download this project's source from the [releases page](https://github.com/natanjunges/custom-desktop/releases). Extract it and open the terminal in the `installer` folder. Download the `.deb` files from the releases page and save them in `installer/build`. Run the main script with:
+Download this project's source from the [releases page](https://github.com/natanjunges/custom-desktop/releases). Extract it and open the terminal in the `installer/` folder. Download the `.deb` files from the releases page and save them in `installer/build/`. Run the main script with:
 ```shell
 ./main
 ```
@@ -30,11 +30,11 @@ Which edition should be installed depends on which version of Ubuntu was install
 
 In the menu, select "Add repositories and install". When the execution is finished, log out and back in, but into the GNOME session (Wayland) instead of the Ubuntu one.
 
-Reopen the terminal in the `installer` folder and rerun the main script. In the menu, select "Change icon and cursor theme and favorite apps". Then, for each user in the system, reopen the terminal in the `installer` folder and rerun the main script. In the menu, select "Apply changes (per user)". Whether or not the favorite apps layout should be preserved depends on the user's preference. In a fresh install, it should not be preserved. When the execution is finished for each user, log out and back into the GNOME session (Wayland) to apply changes.
+Reopen the terminal in the `installer/` folder and rerun the main script. In the menu, select "Change icon and cursor theme and favorite apps". Then, for each user in the system, reopen the terminal in the `installer/` folder and rerun the main script. In the menu, select "Apply changes (per user)". Whether or not the favorite apps layout should be preserved depends on the user's preference. In a fresh install, it should not be preserved. When the execution is finished for each user, log out and back into the GNOME session (Wayland) to apply changes.
 
-If you are not doing this in a fresh install, you might want to replace the installed snaps with their equivalent flatpaks: [popey/unsnap](https://github.com/popey/unsnap). **Keep in mind that this tool is still in "pre-alpha" stage, and might not work as intended**. **You can [contribute](https://github.com/popey/unsnap#contributions) testing it and reporting bugs or missing flatpaks**. Only the generated scripts `00-backup` and `03-install-flatpaks` are required to be run, as the rest is already done here. `snap:firefox` is already replaced with the native deb package, so you should remove it from the generated `03-install-flatpaks` script.
+If you are not doing this in a fresh install, you might want to replace the installed snaps with their equivalent flatpaks: [popey/unsnap](https://github.com/popey/unsnap). **Keep in mind that this tool is still in "pre-alpha" stage, and might not work as intended**. **You can [contribute](https://github.com/popey/unsnap#contributions) testing it and reporting bugs or missing flatpaks**. Only the generated scripts `00-backup` and `03-install-flatpaks` are required to be run, as the rest is already done here. [`snap:firefox`](https://snapcraft.io/firefox) is already replaced with the native deb package, so you should remove it from the generated `03-install-flatpaks` script.
 
-Reopen the terminal in the `installer` folder and rerun the main script. In the menu, select "Purge unused packages". After some execution, a list is shown with the suggested packages to be purged. To decide which packages to keep and which to purge, consult the [Details](#Details) section below. The packages to be kept must be uncommented (removing the `#` prefix). Save the file with `Ctrl`+`S` and quit the editor with `Ctrl`+`X` and the commented packages will be purged. When the execution is finished, restart the system to completely unload the removed software.
+Reopen the terminal in the `installer/` folder and rerun the main script. In the menu, select "Purge unused packages". After some execution, a list is shown with the suggested packages to be purged. To decide which packages to keep and which to purge, consult the [Details](#Details) section below. The packages to be kept must be uncommented (removing the `#` prefix). Save the file with `Ctrl`+`S` and quit the editor with `Ctrl`+`X` and the commented packages will be purged. When the execution is finished, restart the system to completely unload the removed software.
 
 ### Remove
 Reinstall `ubuntu-desktop-minimal`:
@@ -60,7 +60,7 @@ sudo apt purge custom-desktop custom-desktop-minimal
 Remove the custom profile from dconf/gsettings:
 ```shell
 sudo rm /etc/dconf/db/local.d/01-custom-desktop
-sudo rm -r /etc/dconf/db/local.d
+sudo rm -r /etc/dconf/db/local.d/
 sudo rm /etc/dconf/profile/user
 sudo dconf update
 ```
@@ -73,7 +73,7 @@ gsettings reset org.gnome.desktop.interface icon-theme
 gsettings reset org.gnome.desktop.interface cursor-theme
 ```
 
-Reinstall `snap:snap-store` and `snap:firefox`:
+Reinstall [`snap:snap-store`](https://snapcraft.io/snap-store) and `snap:firefox`:
 ```shell
 sudo snap install snap-store firefox
 ```
@@ -114,7 +114,7 @@ sudo apt update
 - [Caffeine](https://extensions.gnome.org/extension/517/caffeine/): Disable the screensaver and auto suspend;
 - [~~Dash to Dock~~](https://extensions.gnome.org/extension/307/dash-to-dock/): This extension moves the dash out of the overview transforming it in a dock for an easier launching of applications and a faster switching between windows and desktops (**currently not supported in GNOME 42, meanwhile [Dash to Dock for COSMIC](https://extensions.gnome.org/extension/5004/dash-to-dock-for-cosmic/) can be used**);
 - [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/): GSConnect is a complete implementation of KDE Connect especially for GNOME Shell with Nautilus, Chrome and Firefox integration;
-    - To integrate with Nautilus, you need to install `python3-nautilus` and `gir1.2-nautilus-3.0`:
+    - To integrate with Nautilus, you need to install [`python3-nautilus`](https://packages.ubuntu.com/jammy/python3-nautilus) and [`gir1.2-nautilus-3.0`](https://packages.ubuntu.com/jammy/gir1.2-nautilus-3.0):
 ```shell
 sudo apt install python3-nautilus gir1.2-nautilus-3.0
 ```
@@ -128,7 +128,7 @@ Awesome Tiles and Tiling Assistant do similar things, and might not work well to
 ## Suggested Firefox extensions
 - [Bitwarden - Free Password Manager](https://addons.mozilla.org/firefox/addon/bitwarden-password-manager/): A secure and free password manager for all of your devices;
 - [GNOME Shell integration](https://addons.mozilla.org/firefox/addon/gnome-shell-integration/): This extension provides integration with GNOME Shell and the corresponding extensions repository;
-    - First you need to install `chrome-gnome-shell`:
+    - First you need to install [`chrome-gnome-shell`](https://packages.ubuntu.com/jammy/chrome-gnome-shell):
 ```shell
 sudo apt install chrome-gnome-shell
 ```
@@ -267,7 +267,7 @@ There are groups of packages that originally belonged to the `ubuntu-desktop-min
 | | [cups-bsd](https://packages.ubuntu.com/jammy/cups-bsd) | Common UNIX Printing System(tm) - BSD commands. |
 | | [cups-client](https://packages.ubuntu.com/jammy/cups-client) | Common UNIX Printing System(tm) - client programs (SysV). |
 | | [cups-filters](https://packages.ubuntu.com/jammy/cups-filters) | OpenPrinting CUPS Filters - Main Package. |
-| Bluetooth | [bluez-cups](https://packages.ubuntu.com/jammy/bluez-cups) | Bluetooth printer driver for CUPS. |
+| Bluetooth | bluez-cups | Bluetooth printer driver for CUPS. |
 | Brother/Lenovo | [printer-driver-brlaser](https://packages.ubuntu.com/jammy/printer-driver-brlaser) | Printer driver for (some) Brother laser printers. |
 | Brother | [printer-driver-ptouch](https://packages.ubuntu.com/jammy/printer-driver-ptouch) | Printer driver Brother P-touch label printers. |
 | Foomatic | [foomatic-db-compressed-ppds](https://packages.ubuntu.com/jammy/foomatic-db-compressed-ppds) | OpenPrinting printer support - Compressed PPDs derived from the database. |
@@ -300,7 +300,7 @@ There are groups of packages that originally belonged to the `ubuntu-desktop-min
 
 | ubuntu-desktop-minimal | Description |
 |------------------------|-------------|
-| [rfkill](https://packages.ubuntu.com/jammy/rfkill) | Tool for enabling and disabling wireless devices. **This package is also used by Bluetooth devices**. **It should only be removed if both Bluetooth and Wi-Fi are not used**. |
+| rfkill | Tool for enabling and disabling wireless devices. **This package is also used by Bluetooth devices**. **It should only be removed if both Bluetooth and Wi-Fi are not used**. |
 | [wireless-tools](https://packages.ubuntu.com/jammy/wireless-tools) | Tools for manipulating Linux Wireless Extensions. |
 | [wpasupplicant](https://packages.ubuntu.com/jammy/wpasupplicant) | Client support for WPA and WPA2 (IEEE 802.11i). |
 
@@ -311,12 +311,12 @@ These are the packages that are added to, removed from or replaced in the `custo
 
 | ubuntu-desktop | custom-desktop | Description |
 |----------------|----------------|-------------|
-| [fonts-opensymbol](https://packages.ubuntu.com/jammy/fonts-opensymbol) | fonts-opensymbol | OpenSymbol TrueType font. **Moved from `custom-desktop-minimal`, as it is used by LibreOffice**. |
-| [gnome-disk-utility](https://packages.ubuntu.com/jammy/gnome-disk-utility) | gnome-disk-utility | Manage and configure disk drives and media. **Moved from `custom-desktop-minimal`, as it is not considered minimal**. |
+| fonts-opensymbol | fonts-opensymbol | OpenSymbol TrueType font. **Moved from `custom-desktop-minimal`, as it is used by LibreOffice**. |
+| gnome-disk-utility | gnome-disk-utility | Manage and configure disk drives and media. **Moved from `custom-desktop-minimal`, as it is not considered minimal**. |
 | [~~libreoffice-ogltrans~~](https://packages.ubuntu.com/jammy/libreoffice-ogltrans) | | Transitional package for libreoffice-ogltrans. **Transitional packages are not needed**. |
 | [~~libreoffice-pdfimport~~](https://packages.ubuntu.com/jammy/libreoffice-pdfimport) | | Transitional package for PDF Import component for LibreOffice. **Transitional packages are not needed**. |
 | [~~libreoffice-style-breeze~~](https://packages.ubuntu.com/jammy/libreoffice-style-breeze) | | Office productivity suite -- Breeze symbol style. **KDE is not supported, so it is not used by most people**. |
-| [libwmf0.2-7-gtk](https://packages.ubuntu.com/jammy/libwmf0.2-7-gtk) | libwmf0.2-7-gtk | Windows metafile conversion library. **Moved from `custom-desktop-minimal`, as it is used by LibreOffice**. |
+| libwmf0.2-7-gtk | libwmf0.2-7-gtk | Windows metafile conversion library. **Moved from `custom-desktop-minimal`, as it is used by LibreOffice**. |
 | [~~transmission-gtk~~](https://packages.ubuntu.com/jammy/transmission-gtk) | [qbittorrent](https://packages.ubuntu.com/jammy/qbittorrent) | Bittorrent client based on libtorrent-rasterbar with a Qt5 GUI. **Transmission is not supported, as it is buggy and lacks several features**. **qBittorrent is used instead, as it is one of the best torrent clients ever**. |
 | | [ubuntu-restricted-extras](https://packages.ubuntu.com/jammy/ubuntu-restricted-extras) | Commonly used media codecs and fonts for Ubuntu. **Adds proprietary codecs so that Totem and Rhythmbox can play most formats**. **The extra fonts and unrar are not installed**. |
 
@@ -336,7 +336,7 @@ There are groups of packages that originally belonged to the `ubuntu-desktop` me
 | ubuntu-desktop | Description |
 |----------------|-------------|
 | [cheese](https://packages.ubuntu.com/jammy/cheese) | Tool to take pictures and videos from your webcam. |
-| [eog](https://packages.ubuntu.com/jammy/eog) | Eye of GNOME graphics viewer program. **Removed as shotwell does what it does and more**. |
+| [eog](https://packages.ubuntu.com/jammy/eog) | Eye of GNOME graphics viewer program. **Removed as Shotwell does what it does and more**. |
 | [simple-scan](https://packages.ubuntu.com/jammy/simple-scan) | Simple Scanning Utility. |
 
 #### Email
