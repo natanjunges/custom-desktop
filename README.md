@@ -112,7 +112,7 @@ sudo apt update
 ## Suggested GNOME Shell extenstions
 - [Awesome Tiles](https://extensions.gnome.org/extension/4702/awesome-tiles/): Tile windows using keyboard shortcuts;
 - [Caffeine](https://extensions.gnome.org/extension/517/caffeine/): Disable the screensaver and auto suspend;
-- [~~Dash to Dock~~](https://extensions.gnome.org/extension/307/dash-to-dock/): This extension moves the dash out of the overview transforming it in a dock for an easier launching of applications and a faster switching between windows and desktops (**currently not supported in GNOME 42**);
+- [~~Dash to Dock~~](https://extensions.gnome.org/extension/307/dash-to-dock/): This extension moves the dash out of the overview transforming it in a dock for an easier launching of applications and a faster switching between windows and desktops (**currently not supported in GNOME 42, meanwhile [Dash to Dock for COSMIC](https://extensions.gnome.org/extension/5004/dash-to-dock-for-cosmic/) can be used**);
 - [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/): GSConnect is a complete implementation of KDE Connect especially for GNOME Shell with Nautilus, Chrome and Firefox integration;
     - To integrate with Nautilus, you need to install `python3-nautilus` and `gir1.2-nautilus-3.0`:
 ```shell
