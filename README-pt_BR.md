@@ -112,6 +112,10 @@ sudo apt update
 - [Caffeine](https://extensions.gnome.org/extension/517/caffeine/): Desabilita a proteção de tela e suspensão automática;
 - [~~Dash to Dock~~](https://extensions.gnome.org/extension/307/dash-to-dock/): Esta extensão move o dash para fora da visão geral transformando-o em uma dock para um lançamento mais fácil de aplicações e uma troca mais rápida entre janelas e desktops (**atualmente não suportada no GNOME 42**);
 - [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/): GSConnect é uma implementação completa do KDE Connect especialmente para o GNOME Shell com integração para Nautilus, Chrome e Firefox;
+    - Para integrar com o Nautilus, você precisa instalar `python3-nautilus` e `gir1.2-nautilus-3.0`:
+```shell
+sudo apt install python3-nautilus gir1.2-nautilus-3.0
+```
 - [Night Theme Switcher](https://extensions.gnome.org/extension/2236/night-theme-switcher/): Deixe seu desktop suave para os olhos, dia e noite;
 - [Tiling Assistant](https://extensions.gnome.org/extension/3733/tiling-assistant/): Expanda o encaixe de 2 colunas do GNOME e adicione um popup inspirado na assistência de encaixe de janelas do Windows.
 
